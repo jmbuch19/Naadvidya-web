@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { createClient } from '@/lib/supabase/server';
 import { VideoRoom } from '@/components/video-room/VideoRoom';
 import { CompleteButton } from '@/components/video-room/CompleteButton';
+import { FloatingToolsButton } from '@/components/plugins/FloatingToolsButton';
 import { logoutAction } from '../../(auth)/actions';
 
 interface PageProps {
@@ -141,6 +142,8 @@ export default async function SessionPage({ params }: PageProps) {
           </div>
         )}
       </main>
+
+      {booking.status === 'confirmed' && <FloatingToolsButton />}
     </div>
   );
 }

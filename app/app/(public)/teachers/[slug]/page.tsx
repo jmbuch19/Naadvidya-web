@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import { getTeacherBySlug } from '@/lib/supabase/queries';
+import { getTeacherBySlug, getTeacherPublicSample } from '@/lib/supabase/queries';
+import { VoiceRepoPlayer } from '@/components/voice-repo/VoiceRepoPlayer';
 
 export const revalidate = 60;
 
@@ -21,6 +22,7 @@ export default async function TeacherProfilePage({ params }: PageProps) {
   const teacher = await getTeacherBySlug(params.slug);
   if (!teacher) notFound();
 
+  const publicSample = await getTeacherPublicSample(teacher.id);
   const profile = teacher.profile;
   const initials = profile.full_name
     .split(/\s+/)
@@ -116,6 +118,21 @@ export default async function TeacherProfilePage({ params }: PageProps) {
           <div className="aspect-video rounded-lg overflow-hidden bg-black">
             <video src={teacher.intro_video_url} controls className="w-full h-full" />
           </div>
+        </section>
+      )}
+
+      {publicSample && (
+        <section className="mt-12 border-t border-line pt-10">
+          <h2 className="font-display text-2xl text-maroon mb-1">Hear {profile.full_name} teach</h2>
+          <p className="text-sm text-muted-warm mb-4">
+            A sample from {profile.full_name.split(' ')[0]}&rsquo;s Voice Repo. Students unlock the full library.
+          </p>
+          <VoiceRepoPlayer item={{ ...publicSample, notes_pdf_key: publicSample.notes_pdf_key, play_count: undefined }} />
+          <p className="mt-3 text-sm">
+            <Link href={`/voice-repo/${teacher.id}`} className="text-maroon-mid hover:underline">
+              See the full Voice Repo →
+            </Link>
+          </p>
         </section>
       )}
     </article>

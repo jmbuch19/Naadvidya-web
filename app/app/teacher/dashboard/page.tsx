@@ -144,7 +144,7 @@ export default async function TeacherDashboardPage() {
           )}
         </Section>
 
-        <div className="mt-12 grid sm:grid-cols-3 gap-4">
+        <div className="mt-12 grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <NavCard
             href="/teacher/profile"
             title="Profile & availability"
@@ -154,6 +154,11 @@ export default async function TeacherDashboardPage() {
             href="/teacher/homework"
             title="Homework inbox"
             sub={pendingReviewCount && pendingReviewCount > 0 ? `${pendingReviewCount} awaiting review` : 'Review student submissions'}
+          />
+          <NavCard
+            href="/teacher/voice-repo"
+            title="Voice Repo"
+            sub="Reference recordings for students"
           />
           <NavCard
             href="/teacher/earnings"

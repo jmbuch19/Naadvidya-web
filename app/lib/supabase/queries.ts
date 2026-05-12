@@ -39,6 +39,42 @@ export async function getApprovedTeachers(): Promise<PublicTeacher[]> {
   }
 }
 
+// Voice Repo public sample for a teacher — visible to anyone (RLS allows anon SELECT
+// of is_public_sample = true). Returns null if the teacher hasn't set one.
+export interface PublicSample {
+  id: string;
+  title: string;
+  description: string | null;
+  raga: string | null;
+  taal: string | null;
+  category: string | null;
+  level_min: number;
+  level_max: number;
+  duration_seconds: number | null;
+  notes_text: string | null;
+  notes_pdf_url: string | null;
+  notes_pdf_key: string | null;
+  is_public_sample: boolean;
+}
+
+export async function getTeacherPublicSample(teacherId: string): Promise<PublicSample | null> {
+  if (!supabaseConfigured()) return null;
+  try {
+    const supabase = createAnonClient();
+    const { data, error } = await supabase
+      .from('voice_repo')
+      .select('id, title, description, raga, taal, category, level_min, level_max, duration_seconds, notes_text, notes_pdf_url, notes_pdf_key, is_public_sample')
+      .eq('teacher_id', teacherId)
+      .eq('is_public_sample', true)
+      .eq('is_active', true)
+      .maybeSingle();
+    if (error || !data) return null;
+    return data as unknown as PublicSample;
+  } catch {
+    return null;
+  }
+}
+
 export async function getTeacherBySlug(slug: string): Promise<PublicTeacher | null> {
   if (!supabaseConfigured()) return null;
 

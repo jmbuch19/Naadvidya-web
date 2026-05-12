@@ -116,7 +116,7 @@ export default async function DashboardPage({ searchParams }: { searchParams: { 
           </Section>
         )}
 
-        <div className="mt-12 grid sm:grid-cols-2 gap-4">
+        <div className="mt-12 grid sm:grid-cols-3 gap-4">
           <Link href="/teachers" className="block p-6 rounded-lg border border-line bg-parchment-2/40 hover:border-maroon-mid transition-colors">
             <h2 className="font-display text-xl text-maroon mb-1">Browse teachers</h2>
             <p className="text-sm text-muted-warm">Find a guru and request a session.</p>
@@ -124,6 +124,10 @@ export default async function DashboardPage({ searchParams }: { searchParams: { 
           <Link href="/homework" className="block p-6 rounded-lg border border-line bg-parchment-2/40 hover:border-maroon-mid transition-colors">
             <h2 className="font-display text-xl text-maroon mb-1">Homework</h2>
             <p className="text-sm text-muted-warm">Assignments to submit · feedback you&rsquo;ve received.</p>
+          </Link>
+          <Link href="/practice" className="block p-6 rounded-lg border border-line bg-parchment-2/40 hover:border-maroon-mid transition-colors">
+            <h2 className="font-display text-xl text-maroon mb-1">Practice tools</h2>
+            <p className="text-sm text-muted-warm">Tanpura drone &amp; taal-aware timer.</p>
           </Link>
         </div>
       </main>

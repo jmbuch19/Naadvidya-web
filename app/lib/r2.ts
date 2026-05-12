@@ -78,6 +78,29 @@ export function buildFeedbackAudioKey(submissionId: string, contentType: string)
   return `feedback/${submissionId}/${Date.now()}-audio.${ext}`;
 }
 
+// Voice Repo (Phase 1.5): teacher reference recordings + optional notation PDFs.
+//   voice-repo/{teacherId}/{uuid}.{ext}      audio
+//   voice-repo/{teacherId}/{uuid}.pdf        notation PDF
+function randomId(): string {
+  return Math.random().toString(36).slice(2, 10) + Date.now().toString(36);
+}
+
+export function buildVoiceRepoAudioKey(teacherId: string, contentType: string): string {
+  const ext = extFromContentType(contentType, 'mp3');
+  return `voice-repo/${teacherId}/${randomId()}.${ext}`;
+}
+
+export function buildVoiceRepoPdfKey(teacherId: string): string {
+  return `voice-repo/${teacherId}/${randomId()}.pdf`;
+}
+
+// Streaming URL for a voice-repo recording — short-lived (1h) so it can't be
+// passed around. Never embed the raw R2 URL in the DOM; fetch this server-side
+// at play time.
+export async function presignStream(key: string): Promise<string> {
+  return presignRead(key); // 1h GET URL, no Content-Disposition (inline playback)
+}
+
 // 5-minute expiry — long enough for the user to upload, short enough that a leaked
 // URL has limited value.
 export async function presignUpload(opts: {

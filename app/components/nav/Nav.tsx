@@ -11,6 +11,7 @@ export function Nav() {
 
         <nav className="hidden md:flex items-center gap-8 text-sm">
           <Link href="/teachers" className="text-ink hover:text-maroon-mid">Teachers</Link>
+          <Link href="/practice" className="text-ink hover:text-maroon-mid">Practice</Link>
           <Link href="/#about" className="text-ink hover:text-maroon-mid">About</Link>
           <Link href="/#how" className="text-ink hover:text-maroon-mid">How it works</Link>
           <Link href="/login" className="text-ink hover:text-maroon-mid">Login</Link>
