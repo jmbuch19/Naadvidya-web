@@ -19,11 +19,12 @@ export default async function AdminDashboardPage() {
   if (profile?.role !== 'owner_admin') redirect('/');
 
   // Get counts. RLS allows admin to see everything.
-  const [pendingTeachers, totalTeachers, totalStudents, pendingPayouts] = await Promise.all([
+  const [pendingTeachers, totalTeachers, totalStudents, pendingPayouts, pendingOfferings] = await Promise.all([
     supabase.from('teacher_profiles').select('*', { count: 'exact', head: true }).eq('approval_status', 'pending'),
     supabase.from('teacher_profiles').select('*', { count: 'exact', head: true }).eq('approval_status', 'approved'),
     supabase.from('profiles').select('*', { count: 'exact', head: true }).eq('role', 'student'),
     supabase.from('payouts').select('*', { count: 'exact', head: true }).eq('status', 'pending'),
+    supabase.from('class_offerings').select('*', { count: 'exact', head: true }).eq('approval_status', 'pending'),
   ]);
 
   return (
@@ -47,24 +48,26 @@ export default async function AdminDashboardPage() {
           <h1 className="font-display text-4xl text-maroon">Naadvidya admin</h1>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-10">
           <Stat label="Pending teachers" value={pendingTeachers.count ?? 0} accent={(pendingTeachers.count ?? 0) > 0} />
+          <Stat label="Pending offerings" value={pendingOfferings.count ?? 0} accent={(pendingOfferings.count ?? 0) > 0} />
           <Stat label="Active teachers" value={totalTeachers.count ?? 0} />
           <Stat label="Students" value={totalStudents.count ?? 0} />
           <Stat label="Pending payouts" value={pendingPayouts.count ?? 0} accent={(pendingPayouts.count ?? 0) > 0} />
         </div>
 
-        <div className="grid md:grid-cols-2 gap-4">
+        <div className="grid md:grid-cols-3 gap-4">
           <NavCard href="/admin/teachers" title="Teachers" sub="Approve pending teachers, manage faculty" />
+          <NavCard href="/admin/offerings" title="Workshops & Programmes" sub="Approve Workshops & Gurukul Paths" />
           <NavCard href="/admin/payouts" title="Payouts" sub="Mark teacher payouts paid" />
           <NavCard href="/admin/bookings" title="Bookings" sub="All sessions, filterable by status" />
           <NavCard href="/admin/students" title="Students" sub="All students, credits, sessions" />
         </div>
 
         <p className="mt-12 text-xs text-muted-warm">
-          Phase 1 admin: approval, payouts, audit. Disputes, audit log filtering, and
-          platform-settings UI come in Phase 1.5 — for now, raw SQL via Supabase works
-          for those edge cases.
+          Phase 1.5 admin: teacher + offering approval, payouts, audit views. Disputes,
+          audit-log filtering, and platform-settings UI come next — for now, raw SQL via
+          Supabase covers those edge cases.
         </p>
       </main>
     </div>

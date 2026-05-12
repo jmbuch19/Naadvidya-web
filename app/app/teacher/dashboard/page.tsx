@@ -144,11 +144,16 @@ export default async function TeacherDashboardPage() {
           )}
         </Section>
 
-        <div className="mt-12 grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="mt-12 grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
           <NavCard
             href="/teacher/profile"
             title="Profile & availability"
             sub="Edit your bio, fee, slots"
+          />
+          <NavCard
+            href="/teacher/offerings"
+            title="Workshops & Programmes"
+            sub="Create Riyaaz Workshops & Gurukul Paths"
           />
           <NavCard
             href="/teacher/homework"

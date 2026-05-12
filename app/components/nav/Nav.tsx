@@ -13,10 +13,10 @@ export function Nav() {
           </span>
         </Link>
 
-        <nav className="hidden md:flex items-center gap-8 text-sm">
+        <nav className="hidden md:flex items-center gap-6 text-sm">
           <Link href="/teachers" className="text-ink hover:text-maroon-mid">Teachers</Link>
+          <Link href="/offerings" className="text-ink hover:text-maroon-mid">Programmes</Link>
           <Link href="/practice" className="text-ink hover:text-maroon-mid">Practice</Link>
-          <Link href="/#about" className="text-ink hover:text-maroon-mid">About</Link>
           <Link href="/#how" className="text-ink hover:text-maroon-mid">How it works</Link>
           <Link href="/login" className="text-ink hover:text-maroon-mid">Login</Link>
           <Link href="/register" className="btn-primary !py-2 !px-4 text-sm">Start Learning</Link>
