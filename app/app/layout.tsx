@@ -35,10 +35,8 @@ export const metadata: Metadata = {
     'Naadvidya is a curated online academy for Indian Classical music at Visharad level and beyond. Hosted by Mrs. Amee Buch, Sangeet Visharad.',
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000'),
   manifest: '/manifest.webmanifest',
-  icons: {
-    icon: [{ url: '/icon.svg', type: 'image/svg+xml' }],
-    apple: [{ url: '/apple-icon.svg' }],
-  },
+  // Favicon / app icon / OG image are picked up from app/favicon.ico, app/icon.png,
+  // app/apple-icon.png and app/opengraph-image.png (Next.js file conventions).
   appleWebApp: {
     capable: true,
     title: 'Naadvidya',
