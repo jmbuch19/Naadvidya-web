@@ -1,0 +1,591 @@
+============================================================
+NAADVIDYA — WhatsApp Business Message Templates
+For submission via Meta Business Manager
+Account: EdUsaathiAI (existing verified business)
+New number: Naadvidya WhatsApp Business line
+Language: English (en)
+============================================================
+
+SUBMISSION INSTRUCTIONS
+------------------------
+1. Go to business.facebook.com → WhatsApp → Message Templates
+2. Click "Create Template"
+3. Category: UTILITY for all templates below (highest approval rate)
+4. Copy template name and body exactly as written
+5. Add variables exactly as shown ({{1}}, {{2}} etc.)
+6. Submit. Approval: 3–5 business days each.
+7. Submit ALL templates in one sitting — do not wait for one to approve before submitting the next.
+8. Priority order for submission is marked ★★★ (submit first), ★★ (submit second), ★ (submit last)
+
+Variable legend: {{1}}, {{2}} etc. are replaced at send time by your code.
+Keep body under 1024 characters. Never include URLs in template body — use buttons instead.
+
+============================================================
+STUDENT TEMPLATES (12 templates)
+============================================================
+
+------------------------------------------------------------
+TEMPLATE 1 ★★★
+Name:        naadvidya_booking_confirmed
+Category:    UTILITY
+Header:      TEXT → "Session Confirmed ✓"
+Body:
+Namaste {{1}} 🙏
+
+Your session with *{{2}}* is confirmed.
+
+📅 Date: {{3}}
+🕐 Time: {{4}} ({{5}})
+⏱ Duration: 60 minutes
+
+Your join link will appear in your Naadvidya dashboard 15 minutes before the session.
+
+Come prepared. Shruti ready. 🎵
+Footer:      Naadvidya — नादविद्या
+Button:      URL → "Open Dashboard" → https://naadvidya.in/dashboard
+------------------------------------------------------------
+
+------------------------------------------------------------
+TEMPLATE 2 ★★★
+Name:        naadvidya_session_reminder_24hr
+Category:    UTILITY
+Header:      TEXT → "Session Tomorrow 🎵"
+Body:
+Namaste {{1}},
+
+Reminder: your session with *{{2}}* is tomorrow.
+
+📅 {{3}} at {{4}} ({{5}})
+
+{{6}}
+
+Prepare well — practice pays. 🙏
+Footer:      Naadvidya — नादविद्या
+Button:      URL → "Open Dashboard" → https://naadvidya.in/dashboard
+
+Note for dev: {{6}} = "✅ Homework submitted — you're ready!" OR "⚠️ Homework not yet submitted. Upload before your session."
+------------------------------------------------------------
+
+------------------------------------------------------------
+TEMPLATE 3 ★★★
+Name:        naadvidya_session_reminder_1hr
+Category:    UTILITY
+Header:      TEXT → "1 Hour to Go 🎵"
+Body:
+Namaste {{1}},
+
+Your session with *{{2}}* begins in *1 hour*.
+
+🕐 {{3}} ({{4}})
+
+Your join link is ready in your dashboard. Please join on time.
+
+सा रे ग म प ध नि सा 🙏
+Footer:      Naadvidya — नादविद्या
+Button:      URL → "Join Session" → https://naadvidya.in/dashboard
+------------------------------------------------------------
+
+------------------------------------------------------------
+TEMPLATE 4 ★★★
+Name:        naadvidya_session_starting_now
+Category:    UTILITY
+Header:      TEXT → "Your Session is Live 🔴"
+Body:
+Namaste {{1}},
+
+*{{2}}* is waiting for you.
+
+Your session has started. Join now from your Naadvidya dashboard.
+
+🎵 नादविद्या
+Footer:      Naadvidya
+Button:      URL → "Join Now" → https://naadvidya.in/dashboard
+------------------------------------------------------------
+
+------------------------------------------------------------
+TEMPLATE 5 ★★★
+Name:        naadvidya_assignment_posted
+Category:    UTILITY
+Header:      TEXT → "New Homework 📝"
+Body:
+Namaste {{1}},
+
+*{{2}}* has posted your homework.
+
+📋 *{{3}}*
+
+Due before: {{4}}
+
+Open Naadvidya to see the full assignment and upload your practice recordings.
+
+Practice with dedication. Your Guru is watching. 🙏
+Footer:      Naadvidya — नादविद्या
+Button:      URL → "View Assignment" → https://naadvidya.in/dashboard/homework
+------------------------------------------------------------
+
+------------------------------------------------------------
+TEMPLATE 6 ★★★
+Name:        naadvidya_feedback_received
+Category:    UTILITY
+Header:      TEXT → "Feedback from Your Guru 🎵"
+Body:
+Namaste {{1}},
+
+*{{2}}* has reviewed your homework submission for *{{3}}*.
+
+Open Naadvidya to read the feedback before your next session.
+
+Every note of feedback is a step forward. 🙏
+Footer:      Naadvidya — नादविद्या
+Button:      URL → "View Feedback" → https://naadvidya.in/dashboard/homework
+------------------------------------------------------------
+
+------------------------------------------------------------
+TEMPLATE 7 ★★
+Name:        naadvidya_homework_due_tomorrow
+Category:    UTILITY
+Header:      TEXT → "Homework Due Tomorrow ⏰"
+Body:
+Namaste {{1}},
+
+A gentle reminder — your homework for *{{2}}* is due tomorrow before your session.
+
+📋 Assignment: *{{3}}*
+
+Upload your recordings and notes on Naadvidya tonight. 🙏
+Footer:      Naadvidya — नादविद्या
+Button:      URL → "Submit Homework" → https://naadvidya.in/dashboard/homework
+------------------------------------------------------------
+
+------------------------------------------------------------
+TEMPLATE 8 ★★
+Name:        naadvidya_booking_cancelled_teacher
+Category:    UTILITY
+Header:      TEXT → "Session Cancelled"
+Body:
+Namaste {{1}},
+
+We regret to inform you that your session with *{{2}}* on *{{3}}* has been cancelled.
+
+Your session credit has been fully refunded to your Naadvidya wallet. A goodwill credit has also been added.
+
+We apologise for the inconvenience. Please rebook at your convenience.
+Footer:      Naadvidya — नादविद्या
+Button:      URL → "Rebook" → https://naadvidya.in/teachers
+------------------------------------------------------------
+
+------------------------------------------------------------
+TEMPLATE 9 ★★
+Name:        naadvidya_session_rescheduled
+Category:    UTILITY
+Header:      TEXT → "Session Rescheduled 📅"
+Body:
+Namaste {{1}},
+
+Your session with *{{2}}* has been rescheduled.
+
+New date: *{{3}}*
+New time: *{{4}}* ({{5}})
+
+Your join link will be updated in your dashboard.
+Footer:      Naadvidya — नादविद्या
+Button:      URL → "View Session" → https://naadvidya.in/dashboard
+------------------------------------------------------------
+
+------------------------------------------------------------
+TEMPLATE 10 ★★
+Name:        naadvidya_low_credits_warning
+Category:    UTILITY
+Header:      TEXT → "1 Credit Remaining 💳"
+Body:
+Namaste {{1}},
+
+You have *1 session credit* remaining in your Naadvidya wallet.
+
+Top up now to ensure your learning continues without a break.
+
+Your next session with *{{2}}* is on *{{3}}*.
+Footer:      Naadvidya — नादविद्या
+Button:      URL → "Buy Credits" → https://naadvidya.in/credits
+------------------------------------------------------------
+
+------------------------------------------------------------
+TEMPLATE 11 ★
+Name:        naadvidya_goodwill_credit_added
+Category:    UTILITY
+Header:      TEXT → "Goodwill Credit Added 🎁"
+Body:
+Namaste {{1}},
+
+A complimentary session credit has been added to your Naadvidya account by the Naadvidya team.
+
+Your new balance: *{{2}} credits*
+
+Thank you for being part of our Gurukul. 🙏
+Footer:      Naadvidya — नादविद्या
+------------------------------------------------------------
+
+------------------------------------------------------------
+TEMPLATE 12 ★
+Name:        naadvidya_credit_purchase_confirmed
+Category:    UTILITY
+Header:      TEXT → "Credits Added ✓"
+Body:
+Namaste {{1}},
+
+Payment received. *{{2}}* has been added to your account.
+
+💳 Pack: {{3}}
+💰 Amount paid: ₹{{4}}
+📊 New balance: {{2}} credits
+
+Happy learning! 🎵
+Footer:      Naadvidya — नादविद्या
+------------------------------------------------------------
+
+
+============================================================
+TEACHER TEMPLATES (10 templates)
+============================================================
+
+------------------------------------------------------------
+TEMPLATE 13 ★★★
+Name:        naadvidya_teacher_approved
+Category:    UTILITY
+Header:      TEXT → "Welcome to Naadvidya Faculty 🎵"
+Body:
+Namaste {{1}},
+
+Congratulations! Your teacher profile on Naadvidya has been *approved* by Amee ji.
+
+Your next steps:
+1. Set your weekly availability
+2. Set your session fee
+3. Your profile goes live for students to discover
+
+Welcome to the Gurukul. 🙏
+
+— Amee Buch, Naadvidya
+Footer:      Naadvidya — नादविद्या
+Button:      URL → "Go to Dashboard" → https://naadvidya.in/teacher/dashboard
+------------------------------------------------------------
+
+------------------------------------------------------------
+TEMPLATE 14 ★★★
+Name:        naadvidya_new_booking_request
+Category:    UTILITY
+Header:      TEXT → "New Session Request 📬"
+Body:
+Namaste {{1}},
+
+*{{2}}* has requested a session with you.
+
+📅 Requested: {{3}}
+🕐 Time: {{4}} IST
+
+Please confirm or decline within *24 hours*. Unconfirmed requests are auto-cancelled.
+
+Open your Naadvidya dashboard to respond.
+Footer:      Naadvidya — नादविद्या
+Button:      URL → "Respond" → https://naadvidya.in/teacher/dashboard
+------------------------------------------------------------
+
+------------------------------------------------------------
+TEMPLATE 15 ★★★
+Name:        naadvidya_homework_submitted
+Category:    UTILITY
+Header:      TEXT → "Homework Submitted 📁"
+Body:
+Namaste {{1}},
+
+*{{2}}* has submitted their homework for *{{3}}*.
+
+Files uploaded: {{4}}
+
+Please review before your next session on *{{5}}*.
+
+Open Naadvidya to listen and leave feedback.
+Footer:      Naadvidya — नादविद्या
+Button:      URL → "Review Homework" → https://naadvidya.in/teacher/homework
+------------------------------------------------------------
+
+------------------------------------------------------------
+TEMPLATE 16 ★★★
+Name:        naadvidya_teacher_session_reminder_1hr
+Category:    UTILITY
+Header:      TEXT → "Session in 1 Hour 🎵"
+Body:
+Namaste {{1}},
+
+Your session with *{{2}}* begins in *1 hour*.
+
+🕐 {{3}} IST
+
+Homework status: {{4}}
+
+Join link is ready in your Naadvidya dashboard. 🙏
+Footer:      Naadvidya — नादविद्या
+Button:      URL → "Open Dashboard" → https://naadvidya.in/teacher/dashboard
+
+Note for dev: {{4}} = "✅ Submitted" OR "❌ Not submitted"
+------------------------------------------------------------
+
+------------------------------------------------------------
+TEMPLATE 17 ★★
+Name:        naadvidya_teacher_session_reminder_24hr
+Category:    UTILITY
+Header:      TEXT → "Session Tomorrow 📅"
+Body:
+Namaste {{1}},
+
+Tomorrow's session: *{{2}}* at *{{3}} IST*
+
+Student: *{{4}}*
+Homework: {{5}}
+
+Be ready. 🙏
+Footer:      Naadvidya — नादविद्या
+Button:      URL → "View Schedule" → https://naadvidya.in/teacher/dashboard
+------------------------------------------------------------
+
+------------------------------------------------------------
+TEMPLATE 18 ★★
+Name:        naadvidya_student_cancelled
+Category:    UTILITY
+Header:      TEXT → "Session Cancelled by Student"
+Body:
+Namaste {{1}},
+
+*{{2}}* has cancelled their session on *{{3}}*.
+
+This slot is now free in your calendar.
+
+No action required on your part.
+Footer:      Naadvidya — नादविद्या
+------------------------------------------------------------
+
+------------------------------------------------------------
+TEMPLATE 19 ★★
+Name:        naadvidya_homework_review_overdue
+Category:    UTILITY
+Header:      TEXT → "Homework Awaiting Review ⏰"
+Body:
+Namaste {{1}},
+
+*{{2}}*'s homework for *{{3}}* has been waiting for your review for *48 hours*.
+
+Please review before your next session on *{{4}}*.
+
+Your students prepare harder when they know feedback is coming. 🙏
+Footer:      Naadvidya — नादविद्या
+Button:      URL → "Review Now" → https://naadvidya.in/teacher/homework
+------------------------------------------------------------
+
+------------------------------------------------------------
+TEMPLATE 20 ★★
+Name:        naadvidya_payout_processed
+Category:    UTILITY
+Header:      TEXT → "Payout Sent ✓"
+Body:
+Namaste {{1}},
+
+Your Naadvidya payout has been processed.
+
+💰 Amount: *₹{{2}}*
+📊 Sessions: {{3}}
+💳 Sent to: {{4}}
+
+Full breakdown available in your Earnings dashboard.
+Footer:      Naadvidya — नादविद्या
+Button:      URL → "View Earnings" → https://naadvidya.in/teacher/earnings
+------------------------------------------------------------
+
+------------------------------------------------------------
+TEMPLATE 21 ★
+Name:        naadvidya_teacher_rejected
+Category:    UTILITY
+Header:      TEXT → "Application Update"
+Body:
+Namaste {{1}},
+
+Thank you for applying to join Naadvidya faculty.
+
+After careful review, we are unable to approve your profile at this time.
+
+Reason: {{2}}
+
+You are welcome to apply again after *90 days* with the suggested improvements.
+
+— Amee Buch, Naadvidya
+Footer:      Naadvidya — नादविद्या
+------------------------------------------------------------
+
+------------------------------------------------------------
+TEMPLATE 22 ★
+Name:        naadvidya_payout_held
+Category:    UTILITY
+Header:      TEXT → "Payout On Hold"
+Body:
+Namaste {{1}},
+
+A payout of *₹{{2}}* for session {{3}} is currently on hold.
+
+Reason: A dispute has been raised for this session and is under review.
+
+Amee ji will resolve this within 72 hours. You will be notified immediately upon resolution.
+Footer:      Naadvidya — नादविद्या
+------------------------------------------------------------
+
+
+============================================================
+ADMIN / AMEE TEMPLATES (6 templates)
+============================================================
+
+------------------------------------------------------------
+TEMPLATE 23 ★★★
+Name:        naadvidya_admin_new_teacher_application
+Category:    UTILITY
+Header:      TEXT → "New Teacher Application 📋"
+Body:
+New application received on Naadvidya.
+
+👤 Name: *{{1}}*
+🎵 Qualifications: {{2}}
+📅 Applied: {{3}}
+
+Review in Admin → Teachers → Approval Queue.
+Footer:      Naadvidya Admin
+Button:      URL → "Review Application" → https://naadvidya.in/admin/teachers
+------------------------------------------------------------
+
+------------------------------------------------------------
+TEMPLATE 24 ★★★
+Name:        naadvidya_admin_dispute_raised
+Category:    UTILITY
+Header:      TEXT → "Dispute Filed ⚠️"
+Body:
+A dispute has been raised on Naadvidya.
+
+🔖 Type: *{{1}}*
+👤 Raised by: {{2}}
+📅 Session: {{3}}
+🕐 Filed: {{4}}
+
+Response required within 24 hours.
+
+Review in Admin → Disputes.
+Footer:      Naadvidya Admin
+Button:      URL → "View Dispute" → https://naadvidya.in/admin/disputes
+------------------------------------------------------------
+
+------------------------------------------------------------
+TEMPLATE 25 ★★★
+Name:        naadvidya_admin_harassment_urgent
+Category:    UTILITY
+Header:      TEXT → "🚨 URGENT: Harassment Report"
+Body:
+A harassment report has been filed on Naadvidya.
+
+👤 Reported by: *{{1}}*
+👤 Against: *{{2}}*
+📅 Session: {{3}}
+
+The account has been automatically suspended pending your review.
+
+Please review *immediately*.
+Footer:      Naadvidya Admin
+Button:      URL → "Review Now" → https://naadvidya.in/admin/disputes
+------------------------------------------------------------
+
+------------------------------------------------------------
+TEMPLATE 26 ★★★
+Name:        naadvidya_admin_payout_reminder
+Category:    UTILITY
+Header:      TEXT → "Payout Day 💰"
+Body:
+Today is payout day on Naadvidya.
+
+📊 Teachers due: *{{1}}*
+💰 Total amount: *₹{{2}}*
+
+Please process all payouts in Admin → Payouts before end of day.
+Footer:      Naadvidya Admin
+Button:      URL → "Process Payouts" → https://naadvidya.in/admin/payouts
+------------------------------------------------------------
+
+------------------------------------------------------------
+TEMPLATE 27 ★★
+Name:        naadvidya_admin_payment_failure
+Category:    UTILITY
+Header:      TEXT → "Payment Webhook Issue ⚠️"
+Body:
+A Razorpay webhook issue was detected.
+
+🔖 Order ID: *{{1}}*
+⚠️ Issue: {{2}}
+🕐 Time: {{3}}
+
+Credits may not have been added. Manual check required.
+
+Admin → Revenue → Check Order {{1}}
+Footer:      Naadvidya Admin
+------------------------------------------------------------
+
+------------------------------------------------------------
+TEMPLATE 28 ★
+Name:        naadvidya_admin_teacher_no_show
+Category:    UTILITY
+Header:      TEXT → "Teacher No-Show Flagged"
+Body:
+A teacher no-show has been flagged.
+
+👤 Teacher: *{{1}}*
+👤 Student: *{{2}}*
+📅 Session: {{3}}
+
+Strike recorded. Student credit refunded + goodwill credit added.
+
+Review in Admin → Sessions if further action is needed.
+Footer:      Naadvidya Admin
+Button:      URL → "View Session" → https://naadvidya.in/admin/sessions
+------------------------------------------------------------
+
+
+============================================================
+TEMPLATE SUMMARY TABLE
+============================================================
+
+Total templates: 28
+Priority ★★★ (submit first — 10): 1,2,3,4,5,13,14,15,16,23,24,25,26
+Priority ★★  (submit second — 11): 6,7,8,9,10,17,18,19,20,27,28
+Priority ★   (submit last — 5): 11,12,21,22
+
+All templates: Category = UTILITY
+All templates: Language = en
+All templates: submitted under existing EdUsaathiAI Meta Business account
+New WhatsApp Business number: obtain a dedicated number for Naadvidya
+(Cannot be a number already registered on personal WhatsApp)
+
+============================================================
+WHAT TO DO IF A TEMPLATE IS REJECTED BY META
+============================================================
+
+Common rejection reasons and fixes:
+
+1. "Promotional content" — Remove any pricing, offers, or marketing language.
+   Fix: reword to purely informational.
+
+2. "Variable mismatch" — Variables must be sequential ({{1}}, {{2}}, not {{1}}, {{3}}).
+   Fix: renumber all variables.
+
+3. "URL not matching" — Button URL domain must match your verified business domain.
+   Fix: ensure naadvidya.in is verified in Meta Business Manager before submitting.
+
+4. "Template too similar to existing" — Meta rejects near-duplicates.
+   Fix: differentiate wording meaningfully.
+
+5. "Header and body too similar" — Header must add information, not repeat body.
+   Fix: make header a label, not a summary.
+
+If rejected: fix and resubmit. Do not create a new template with a different name
+to bypass rejection — Meta tracks this and may restrict your account.

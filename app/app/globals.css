@@ -1,0 +1,83 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Naadvidya design tokens — see NAADVIDYA_MASTER_SPEC.md §11 */
+:root {
+  --maroon:       #2D0808;
+  --maroon-mid:   #8B1A1A;
+  --gold:         #C5A028;
+  --saffron:      #E07B39;
+  --parchment:    #FAF3E0;
+  --parchment-2:  #F4EAD0;
+  --ink:          #1A0A00;
+  --muted:        #7A6652;
+  --line:         #E0D4B8;
+
+  --font-display: var(--font-cormorant), Georgia, serif;
+  --font-body:    var(--font-jakarta), system-ui, sans-serif;
+}
+
+html, body {
+  background: var(--parchment);
+  color: var(--ink);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  color: var(--maroon);
+  letter-spacing: -0.01em;
+}
+
+a { color: var(--maroon-mid); }
+a:hover { color: var(--maroon); }
+
+@layer utilities {
+  .text-balance { text-wrap: balance; }
+  .font-display { font-family: var(--font-display); }
+  .font-body    { font-family: var(--font-body); }
+
+  .bg-parchment  { background-color: var(--parchment); }
+  .bg-maroon     { background-color: var(--maroon); }
+  .bg-maroon-mid { background-color: var(--maroon-mid); }
+  .bg-gold       { background-color: var(--gold); }
+  .bg-saffron    { background-color: var(--saffron); }
+
+  .text-maroon     { color: var(--maroon); }
+  .text-maroon-mid { color: var(--maroon-mid); }
+  .text-gold       { color: var(--gold); }
+  .text-saffron    { color: var(--saffron); }
+  .text-ink        { color: var(--ink); }
+  .text-muted-warm { color: var(--muted); }
+
+  .border-line { border-color: var(--line); }
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 1.5rem;
+  background-color: var(--maroon-mid);
+  color: var(--parchment);
+  border-radius: 0.375rem;
+  font-weight: 500;
+  transition: background-color 0.15s ease;
+}
+.btn-primary:hover { background-color: var(--maroon); color: var(--parchment); }
+
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 1.5rem;
+  border: 1px solid var(--maroon-mid);
+  color: var(--maroon-mid);
+  border-radius: 0.375rem;
+  font-weight: 500;
+  transition: all 0.15s ease;
+}
+.btn-ghost:hover { background-color: var(--maroon-mid); color: var(--parchment); }
