@@ -52,6 +52,10 @@ export default function LoginPage({ searchParams }: PageProps) {
         <button type="submit" className="btn-primary w-full">Sign in</button>
       </form>
 
+      <p className="mt-3 text-sm text-center">
+        <Link href="/forgot-password" className="text-maroon-mid hover:underline">Forgot your password?</Link>
+      </p>
+
       <p className="mt-6 text-sm text-muted-warm text-center">
         New to Naadvidya?{' '}
         <Link href="/register" className="text-maroon-mid hover:underline">Create an account</Link>
