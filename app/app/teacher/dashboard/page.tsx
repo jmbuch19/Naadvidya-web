@@ -80,8 +80,8 @@ export default async function TeacherDashboardPage() {
     .eq('status', 'submitted')
     .eq('assignment.teacher_id', teacher.id);
 
-  // Pending Gurukul applications + upcoming scheduled (Workshop/Gurukul) sessions
-  const [{ count: pendingApplications }, { data: scheduled }] = await Promise.all([
+  // Pending Gurukul applications + upcoming scheduled sessions + payout details presence
+  const [{ count: pendingApplications }, { data: scheduled }, { data: payoutDetails }] = await Promise.all([
     supabase.from('enrollments').select('id', { count: 'exact', head: true }).eq('teacher_id', teacher.id).eq('status', 'pending'),
     supabase
       .from('scheduled_sessions')
@@ -95,8 +95,10 @@ export default async function TeacherDashboardPage() {
       .order('scheduled_at', { ascending: true })
       .limit(12)
       .returns<{ id: string; scheduled_at: string; duration_minutes: number; session_number: number | null; status: string; student: { full_name: string }; enrollment: { offering: { title: string } } | null }[]>(),
+    supabase.from('teacher_payout_details').select('payout_method').eq('teacher_id', teacher.id).maybeSingle<{ payout_method: string | null }>(),
   ]);
   const scheduledSessions = scheduled ?? [];
+  const hasPayoutMethod = !!payoutDetails?.payout_method;
 
   const now = new Date();
   const pending = (bookings ?? []).filter((b) => b.status === 'pending');
@@ -117,6 +119,12 @@ export default async function TeacherDashboardPage() {
         </div>
 
         <ApprovalBanner teacher={teacher} />
+
+        {!hasPayoutMethod && (
+          <div className="mb-8 rounded-lg border border-gold/40 bg-parchment-2 px-4 py-3 text-sm text-ink">
+            ⚠️ Add your <Link href="/teacher/profile#payout" className="text-maroon-mid hover:underline">payout details (UPI / bank)</Link> so Amee can pay you. Naadvidya can&rsquo;t transfer your share until then.
+          </div>
+        )}
 
         <Section title="Pending requests" count={pending.length}>
           {pending.length === 0 ? (

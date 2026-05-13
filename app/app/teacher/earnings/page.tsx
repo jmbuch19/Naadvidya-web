@@ -15,7 +15,14 @@ interface PayoutRow {
   paid_at: string | null;
   payment_reference: string | null;
   created_at: string;
-  booking: { scheduled_at: string | null; student: { full_name: string } };
+  booking: { scheduled_at: string | null; student: { full_name: string } } | null;
+  scheduled_session: { scheduled_at: string | null; student: { full_name: string }; enrollment: { offering: { title: string } } | null } | null;
+}
+
+function payoutWho(p: PayoutRow): { date: string | null; student: string; label: string } {
+  if (p.booking) return { date: p.booking.scheduled_at, student: p.booking.student?.full_name ?? '—', label: 'Mehfil' };
+  if (p.scheduled_session) return { date: p.scheduled_session.scheduled_at, student: p.scheduled_session.student?.full_name ?? '—', label: p.scheduled_session.enrollment?.offering?.title ?? 'Class' };
+  return { date: null, student: '—', label: '—' };
 }
 
 export default async function TeacherEarningsPage() {
@@ -30,19 +37,21 @@ export default async function TeacherEarningsPage() {
     .maybeSingle<{ id: string; session_fee_inr: number }>();
   if (!teacher) redirect('/dashboard');
 
-  const { data: payouts } = await supabase
-    .from('payouts')
-    .select(`
-      id, gross_amount, platform_cut, teacher_amount, is_owner_session,
-      status, paid_at, payment_reference, created_at,
-      booking:bookings!payouts_booking_id_fkey(
-        scheduled_at,
-        student:profiles!bookings_student_id_fkey(full_name)
-      )
-    `)
-    .eq('teacher_id', teacher.id)
-    .order('created_at', { ascending: false })
-    .returns<PayoutRow[]>();
+  const [{ data: payouts }, { data: payoutDetails }] = await Promise.all([
+    supabase
+      .from('payouts')
+      .select(`
+        id, gross_amount, platform_cut, teacher_amount, is_owner_session,
+        status, paid_at, payment_reference, created_at,
+        booking:bookings!payouts_booking_id_fkey(scheduled_at, student:profiles!bookings_student_id_fkey(full_name)),
+        scheduled_session:scheduled_sessions!payouts_scheduled_session_id_fkey(scheduled_at, student:profiles!scheduled_sessions_student_id_fkey(full_name), enrollment:enrollments!scheduled_sessions_enrollment_id_fkey(offering:class_offerings!enrollments_offering_id_fkey(title)))
+      `)
+      .eq('teacher_id', teacher.id)
+      .order('created_at', { ascending: false })
+      .returns<PayoutRow[]>(),
+    supabase.from('teacher_payout_details').select('payout_method').eq('teacher_id', teacher.id).maybeSingle<{ payout_method: string | null }>(),
+  ]);
+  const hasPayoutMethod = !!payoutDetails?.payout_method;
 
   const all = payouts ?? [];
   const pending = all.filter((p) => p.status === 'pending');
@@ -81,9 +90,16 @@ export default async function TeacherEarningsPage() {
           <h1 className="font-display text-4xl text-maroon">Your payouts</h1>
           <p className="text-muted-warm mt-2 text-sm">
             Amee processes payouts on the 1st and 15th of every month via UPI/bank.
-            Minimum threshold ₹500.
+            Minimum ₹500 — smaller balances roll over to the next cycle.
           </p>
         </div>
+
+        {!hasPayoutMethod && (
+          <div className="mb-6 rounded-lg border border-gold/40 bg-parchment-2 px-4 py-3 text-sm text-ink">
+            ⚠️ You haven&rsquo;t added your payout details — Amee can&rsquo;t pay you until you do.{' '}
+            <Link href="/teacher/profile#payout" className="text-maroon-mid hover:underline">Add UPI / bank details →</Link>
+          </div>
+        )}
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
           <Stat label="Pending" value={`₹${Math.round(pendingTotal).toLocaleString('en-IN')}`} accent />
@@ -101,6 +117,7 @@ export default async function TeacherEarningsPage() {
             <table className="w-full text-sm">
               <thead className="text-left text-xs uppercase text-muted-warm">
                 <tr className="border-b border-line">
+                  <th className="py-2 pr-3">Date</th>
                   <th className="py-2 pr-3">Session</th>
                   <th className="py-2 pr-3">Student</th>
                   <th className="py-2 pr-3 text-right">Gross</th>
@@ -109,22 +126,22 @@ export default async function TeacherEarningsPage() {
                 </tr>
               </thead>
               <tbody>
-                {all.slice(0, 100).map((p) => (
-                  <tr key={p.id} className="border-b border-line/50">
-                    <td className="py-2 pr-3 text-muted-warm text-xs">
-                      {p.booking.scheduled_at
-                        ? new Date(p.booking.scheduled_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: '2-digit' })
-                        : '—'}
-                    </td>
-                    <td className="py-2 pr-3 text-ink">{p.booking.student.full_name}</td>
-                    <td className="py-2 pr-3 text-right text-muted-warm">₹{Math.round(p.gross_amount).toLocaleString('en-IN')}</td>
-                    <td className="py-2 pr-3 text-right font-medium text-ink">₹{Math.round(p.teacher_amount).toLocaleString('en-IN')}</td>
-                    <td className="py-2 pr-3">
-                      <StatusBadge status={p.status} />
-                      {p.payment_reference && <span className="ml-2 text-xs text-muted-warm">{p.payment_reference}</span>}
-                    </td>
-                  </tr>
-                ))}
+                {all.slice(0, 100).map((p) => {
+                  const who = payoutWho(p);
+                  return (
+                    <tr key={p.id} className="border-b border-line/50">
+                      <td className="py-2 pr-3 text-muted-warm text-xs">{who.date ? new Date(who.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: '2-digit' }) : '—'}</td>
+                      <td className="py-2 pr-3 text-muted-warm text-xs">{who.label}{p.is_owner_session ? ' · owner' : ''}</td>
+                      <td className="py-2 pr-3 text-ink">{who.student}</td>
+                      <td className="py-2 pr-3 text-right text-muted-warm">₹{Math.round(p.gross_amount).toLocaleString('en-IN')}</td>
+                      <td className="py-2 pr-3 text-right font-medium text-ink">₹{Math.round(p.teacher_amount).toLocaleString('en-IN')}</td>
+                      <td className="py-2 pr-3">
+                        <StatusBadge status={p.status} />
+                        {p.payment_reference && <span className="ml-2 text-xs text-muted-warm">{p.payment_reference}</span>}
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>

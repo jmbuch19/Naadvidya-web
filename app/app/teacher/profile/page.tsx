@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { createClient } from '@/lib/supabase/server';
 import { ProfileEditor } from '@/components/teacher/ProfileEditor';
 import { AvailabilityEditor } from '@/components/teacher/AvailabilityEditor';
+import { PayoutDetailsForm } from '@/components/teacher/PayoutDetailsForm';
 import { logoutAction } from '../../(auth)/actions';
 
 export const metadata = { title: 'Profile & availability — Naadvidya' };
@@ -60,6 +61,12 @@ export default async function TeacherProfilePage() {
     .order('start_time', { ascending: true })
     .returns<AvailabilityRow[]>();
 
+  const { data: payout } = await supabase
+    .from('teacher_payout_details')
+    .select('payout_method, upi_id, bank_account_name, bank_account_number, bank_ifsc')
+    .eq('teacher_id', teacher.id)
+    .maybeSingle<{ payout_method: 'upi' | 'bank' | null; upi_id: string | null; bank_account_name: string | null; bank_account_number: string | null; bank_ifsc: string | null }>();
+
   return (
     <div className="min-h-screen bg-parchment">
       <header className="border-b border-line bg-parchment">
@@ -97,13 +104,21 @@ export default async function TeacherProfilePage() {
           <ProfileEditor initial={teacher} />
         </section>
 
-        <section>
+        <section className="mb-12">
           <h2 className="font-display text-2xl text-maroon mb-2">Availability</h2>
           <p className="text-sm text-muted-warm mb-4">
             Maintain at least 4 bookable slots per week to stay active on the platform.
             Slot times are interpreted in IST.
           </p>
           <AvailabilityEditor initial={slots ?? []} />
+        </section>
+
+        <section id="payout" className="scroll-mt-20">
+          <h2 className="font-display text-2xl text-maroon mb-2">Payout details</h2>
+          <p className="text-sm text-muted-warm mb-4">
+            Where Naadvidya sends your 80% share. {!payout?.payout_method && <span className="text-maroon-mid">Add this so you can be paid.</span>}
+          </p>
+          <PayoutDetailsForm initial={payout ?? null} />
         </section>
       </main>
     </div>
