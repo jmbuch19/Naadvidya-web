@@ -8,10 +8,16 @@ interface Body {
   specializations?: string[];
   ragas_taught?: string[];
   languages?: string[];
+  gharana?: string | null;
+  gurus?: string[];
+  instruments?: string[];
+  student_levels?: string[];
   session_fee_inr?: number;
   intro_video_url?: string | null;
   auto_confirm?: boolean;
 }
+
+const VALID_LEVELS = ['Beginner', 'Intermediate', 'Advanced'] as const;
 
 const MIN_FEE = 500;
 const MAX_FEE = 5000;
@@ -49,6 +55,16 @@ export async function POST(req: Request) {
   if (body.specializations) updates.specializations = clean(body.specializations);
   if (body.ragas_taught) updates.ragas_taught = clean(body.ragas_taught);
   if (body.languages) updates.languages = clean(body.languages);
+  if (body.gurus) updates.gurus = clean(body.gurus);
+  if (body.instruments) updates.instruments = clean(body.instruments);
+  if (body.student_levels) {
+    updates.student_levels = clean(body.student_levels)
+      .filter((l): l is (typeof VALID_LEVELS)[number] => (VALID_LEVELS as readonly string[]).includes(l));
+  }
+  if (body.gharana !== undefined) {
+    const g = body.gharana?.trim();
+    updates.gharana = g ? g.slice(0, 120) : null;
+  }
   if (typeof body.session_fee_inr === 'number') {
     if (body.session_fee_inr < MIN_FEE || body.session_fee_inr > MAX_FEE) {
       return NextResponse.json({ error: `Fee must be between ₹${MIN_FEE} and ₹${MAX_FEE}` }, { status: 400 });

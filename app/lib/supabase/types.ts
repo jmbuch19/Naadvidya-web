@@ -39,6 +39,10 @@ export interface TeacherProfileRow {
   specializations: string[];
   ragas_taught: string[];
   languages: string[];
+  gharana: string | null;
+  gurus: string[];
+  instruments: string[];
+  student_levels: string[];
   session_fee_inr: number;
   intro_video_url: string | null;
   approval_status: ApprovalStatus;

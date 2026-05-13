@@ -10,10 +10,16 @@ interface TeacherRow {
   specializations: string[];
   ragas_taught: string[];
   languages: string[];
+  gharana: string | null;
+  gurus: string[];
+  instruments: string[];
+  student_levels: string[];
   session_fee_inr: number;
   intro_video_url: string | null;
   auto_confirm: boolean;
 }
+
+const LEVEL_OPTIONS = ['Beginner', 'Intermediate', 'Advanced'] as const;
 
 export function ProfileEditor({ initial }: { initial: TeacherRow }) {
   const router = useRouter();
@@ -26,6 +32,10 @@ export function ProfileEditor({ initial }: { initial: TeacherRow }) {
   const [specializations, setSpecializations] = useState<string[]>(initial.specializations ?? []);
   const [ragas, setRagas] = useState<string[]>(initial.ragas_taught ?? []);
   const [languages, setLanguages] = useState<string[]>(initial.languages ?? ['Hindi', 'English']);
+  const [gharana, setGharana] = useState(initial.gharana ?? '');
+  const [gurus, setGurus] = useState<string[]>(initial.gurus ?? []);
+  const [instruments, setInstruments] = useState<string[]>(initial.instruments ?? []);
+  const [studentLevels, setStudentLevels] = useState<string[]>(initial.student_levels ?? []);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -48,6 +58,10 @@ export function ProfileEditor({ initial }: { initial: TeacherRow }) {
           specializations,
           ragas_taught: ragas,
           languages,
+          gharana: gharana.trim() || null,
+          gurus,
+          instruments,
+          student_levels: studentLevels,
         }),
       });
       if (!res.ok) {
@@ -115,13 +129,77 @@ export function ProfileEditor({ initial }: { initial: TeacherRow }) {
         placeholder="Sangeet Visharad"
       />
 
+      <label className="block">
+        <span className="text-sm text-ink">Gharana / lineage</span>
+        <span className="block text-xs text-muted-warm mb-1">
+          The school you belong to — e.g. Gwalior, Kirana, Patiala, Benaras, Jaipur-Atrauli. Leave blank if not applicable.
+        </span>
+        <input
+          type="text"
+          value={gharana}
+          onChange={(e) => setGharana(e.target.value)}
+          maxLength={120}
+          placeholder="Gwalior gharana"
+          className="w-full px-3 py-2 rounded border border-line bg-parchment focus:outline-none focus:border-maroon-mid"
+        />
+      </label>
+
       <ChipEditor
-        label="Specializations"
-        hint="e.g. Khayal · Thumri · Tabla"
+        label="Gurus you trained under"
+        hint="Names of the teachers you studied with. Adds enormous credibility."
+        items={gurus}
+        onChange={setGurus}
+        placeholder="Pandit Vinay Kumar"
+      />
+
+      <ChipEditor
+        label="Instruments taught"
+        hint="e.g. Voice · Tabla · Sitar · Harmonium. Keep this separate from style/specializations."
+        items={instruments}
+        onChange={setInstruments}
+        placeholder="Voice"
+      />
+
+      <ChipEditor
+        label="Specializations (style)"
+        hint="e.g. Khayal · Thumri · Bhajan · Dhrupad. The style of music you teach."
         items={specializations}
         onChange={setSpecializations}
         placeholder="Khayal"
       />
+
+      <div>
+        <span className="block text-sm text-ink">Student levels you accept</span>
+        <span className="block text-xs text-muted-warm mb-2">
+          Tick all that apply. Helps students find the right fit.
+        </span>
+        <div className="flex flex-wrap gap-3">
+          {LEVEL_OPTIONS.map((level) => {
+            const checked = studentLevels.includes(level);
+            return (
+              <label
+                key={level}
+                className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full border cursor-pointer text-sm ${
+                  checked
+                    ? 'bg-maroon-mid text-parchment border-maroon-mid'
+                    : 'bg-parchment border-line text-ink hover:border-maroon-mid'
+                }`}
+              >
+                <input
+                  type="checkbox"
+                  className="sr-only"
+                  checked={checked}
+                  onChange={(e) => {
+                    if (e.target.checked) setStudentLevels([...studentLevels, level]);
+                    else setStudentLevels(studentLevels.filter((l) => l !== level));
+                  }}
+                />
+                {level}
+              </label>
+            );
+          })}
+        </div>
+      </div>
 
       <ChipEditor
         label="Ragas taught"

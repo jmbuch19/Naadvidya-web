@@ -6,10 +6,13 @@ import type { TeacherProfileRow, ProfileRow } from './types';
 
 export type PublicTeacher = Pick<
   TeacherProfileRow,
-  'id' | 'slug' | 'bio' | 'specializations' | 'ragas_taught' | 'languages' | 'session_fee_inr' | 'intro_video_url' | 'years_experience' | 'sangeet_qualifications'
+  'id' | 'slug' | 'bio' | 'specializations' | 'ragas_taught' | 'languages' | 'session_fee_inr' | 'intro_video_url' | 'years_experience' | 'sangeet_qualifications' | 'gharana' | 'gurus' | 'instruments' | 'student_levels'
 > & {
   profile: Pick<ProfileRow, 'id' | 'full_name' | 'avatar_url' | 'is_owner' | 'city'>;
 };
+
+const PUBLIC_TEACHER_COLS =
+  'id, slug, bio, specializations, ragas_taught, languages, session_fee_inr, intro_video_url, years_experience, sangeet_qualifications, gharana, gurus, instruments, student_levels, profile:profiles!teacher_profiles_profile_id_fkey(id, full_name, avatar_url, is_owner, city)';
 
 function supabaseConfigured() {
   return !!process.env.NEXT_PUBLIC_SUPABASE_URL && !!process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
@@ -22,9 +25,7 @@ export async function getApprovedTeachers(): Promise<PublicTeacher[]> {
     const supabase = createAnonClient();
     const { data, error } = await supabase
       .from('teacher_profiles')
-      .select(
-        'id, slug, bio, specializations, ragas_taught, languages, session_fee_inr, intro_video_url, years_experience, sangeet_qualifications, profile:profiles!teacher_profiles_profile_id_fkey(id, full_name, avatar_url, is_owner, city)'
-      )
+      .select(PUBLIC_TEACHER_COLS)
       .eq('is_visible', true)
       .order('created_at', { ascending: true });
 
@@ -82,9 +83,7 @@ export async function getTeacherBySlug(slug: string): Promise<PublicTeacher | nu
     const supabase = createAnonClient();
     const { data, error } = await supabase
       .from('teacher_profiles')
-      .select(
-        'id, slug, bio, specializations, ragas_taught, languages, session_fee_inr, intro_video_url, years_experience, sangeet_qualifications, profile:profiles!teacher_profiles_profile_id_fkey(id, full_name, avatar_url, is_owner, city)'
-      )
+      .select(PUBLIC_TEACHER_COLS)
       .eq('slug', slug)
       .eq('is_visible', true)
       .maybeSingle();

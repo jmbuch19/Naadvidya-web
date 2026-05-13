@@ -16,6 +16,10 @@ interface TeacherRow {
   specializations: string[];
   ragas_taught: string[];
   languages: string[];
+  gharana: string | null;
+  gurus: string[];
+  instruments: string[];
+  student_levels: string[];
   session_fee_inr: number;
   intro_video_url: string | null;
   auto_confirm: boolean;
@@ -47,7 +51,7 @@ export default async function TeacherProfilePage() {
 
   const { data: teacher } = await supabase
     .from('teacher_profiles')
-    .select('id, bio, years_experience, sangeet_qualifications, specializations, ragas_taught, languages, session_fee_inr, intro_video_url, auto_confirm, approval_status, is_visible, slug')
+    .select('id, bio, years_experience, sangeet_qualifications, specializations, ragas_taught, languages, gharana, gurus, instruments, student_levels, session_fee_inr, intro_video_url, auto_confirm, approval_status, is_visible, slug')
     .eq('profile_id', user.id)
     .maybeSingle<TeacherRow>();
 

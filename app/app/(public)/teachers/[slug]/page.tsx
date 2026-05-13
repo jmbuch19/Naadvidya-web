@@ -56,11 +56,21 @@ export default async function TeacherProfilePage({ params }: PageProps) {
               {teacher.sangeet_qualifications.join(' · ')}
             </p>
           ) : null}
+          {teacher.gharana && (
+            <p className="font-display text-maroon-mid text-base mt-1">
+              {teacher.gharana}
+            </p>
+          )}
           {profile.city && (
             <p className="text-muted-warm text-sm mt-1">{profile.city}</p>
           )}
 
           <div className="mt-6 flex flex-wrap gap-2">
+            {teacher.instruments?.map((i) => (
+              <span key={`instr-${i}`} className="text-sm px-3 py-1 rounded-full bg-maroon-mid/10 border border-maroon-mid/30 text-maroon">
+                {i}
+              </span>
+            ))}
             {teacher.specializations?.map((s) => (
               <span key={s} className="text-sm px-3 py-1 rounded-full bg-parchment-2 border border-line text-ink">
                 {s}
@@ -110,6 +120,22 @@ export default async function TeacherProfilePage({ params }: PageProps) {
             {teacher.years_experience ? `${teacher.years_experience} years` : '—'}
           </p>
         </div>
+
+        {teacher.gurus?.length ? (
+          <div>
+            <h3 className="font-display text-lg text-maroon mb-2">Gurus</h3>
+            <ul className="text-sm text-muted-warm space-y-1">
+              {teacher.gurus.map((g) => <li key={g}>{g}</li>)}
+            </ul>
+          </div>
+        ) : null}
+
+        {teacher.student_levels?.length ? (
+          <div>
+            <h3 className="font-display text-lg text-maroon mb-2">Accepts students</h3>
+            <p className="text-sm text-muted-warm">{teacher.student_levels.join(', ')}</p>
+          </div>
+        ) : null}
       </section>
 
       {teacher.intro_video_url && (
