@@ -23,13 +23,18 @@ export interface DailyRoom {
   url: string;
 }
 
-// Create a private 2-participant room expiring 2 hours after the scheduled session.
-export async function createDailyRoom(opts: {
-  bookingId: string;
+// Create a private 2-participant room. Name is namespaced; expiry is 2h after the
+// session ends. Used for Mehfil bookings (prefix 'b') and scheduled sessions (prefix 's').
+export async function createRoom(opts: {
+  prefix: string;            // short namespace, e.g. 'b' (booking) or 's' (scheduled session)
+  id: string;
   scheduledAt: Date;
   durationMinutes: number;
 }): Promise<DailyRoom> {
-  const name = `naadvidya-${opts.bookingId}`;
+  // Daily room names: lowercase alphanumerics + dashes, ≤ ~40 chars. UUIDs have dashes
+  // already; we just take the first chunk to stay short and unique enough.
+  const shortId = opts.id.replace(/[^a-z0-9]/gi, '').slice(0, 24).toLowerCase();
+  const name = `nv-${opts.prefix}-${shortId}`;
   const exp = Math.floor(opts.scheduledAt.getTime() / 1000) + opts.durationMinutes * 60 + 7200;
 
   const res = await fetch(`${API_BASE}/rooms`, {
@@ -47,12 +52,29 @@ export async function createDailyRoom(opts: {
     }),
   });
 
+  if (res.status === 400) {
+    // Likely "already exists" — fetch it instead of failing.
+    const existing = await fetch(`${API_BASE}/rooms/${name}`, { headers: authHeaders() });
+    if (existing.ok) {
+      const j = await existing.json();
+      return { name: j.name, url: j.url };
+    }
+  }
   if (!res.ok) {
     const text = await res.text();
     throw new Error(`Daily.co room creation failed (${res.status}): ${text}`);
   }
   const json = await res.json();
   return { name: json.name, url: json.url };
+}
+
+// Back-compat wrapper used by the Mehfil booking-confirm route.
+export async function createDailyRoom(opts: {
+  bookingId: string;
+  scheduledAt: Date;
+  durationMinutes: number;
+}): Promise<DailyRoom> {
+  return createRoom({ prefix: 'b', id: opts.bookingId, scheduledAt: opts.scheduledAt, durationMinutes: opts.durationMinutes });
 }
 
 // Generate a meeting token. Teacher = owner/moderator, student = non-owner.

@@ -80,6 +80,24 @@ export default async function TeacherDashboardPage() {
     .eq('status', 'submitted')
     .eq('assignment.teacher_id', teacher.id);
 
+  // Pending Gurukul applications + upcoming scheduled (Workshop/Gurukul) sessions
+  const [{ count: pendingApplications }, { data: scheduled }] = await Promise.all([
+    supabase.from('enrollments').select('id', { count: 'exact', head: true }).eq('teacher_id', teacher.id).eq('status', 'pending'),
+    supabase
+      .from('scheduled_sessions')
+      .select(`
+        id, scheduled_at, duration_minutes, session_number, status,
+        student:profiles!scheduled_sessions_student_id_fkey(full_name),
+        enrollment:enrollments!scheduled_sessions_enrollment_id_fkey(offering:class_offerings!enrollments_offering_id_fkey(title))
+      `)
+      .eq('teacher_id', teacher.id)
+      .eq('status', 'upcoming')
+      .order('scheduled_at', { ascending: true })
+      .limit(12)
+      .returns<{ id: string; scheduled_at: string; duration_minutes: number; session_number: number | null; status: string; student: { full_name: string }; enrollment: { offering: { title: string } } | null }[]>(),
+  ]);
+  const scheduledSessions = scheduled ?? [];
+
   const now = new Date();
   const pending = (bookings ?? []).filter((b) => b.status === 'pending');
   const upcoming = (bookings ?? []).filter(
@@ -111,14 +129,55 @@ export default async function TeacherDashboardPage() {
           )}
         </Section>
 
-        <Section title="Upcoming sessions" count={upcoming.length}>
-          {upcoming.length === 0 ? (
+        {pendingApplications && pendingApplications > 0 ? (
+          <Section title="Programme applications" count={pendingApplications}>
+            <div className="bg-parchment-2/40 border border-line rounded-lg p-4 text-sm text-ink">
+              {pendingApplications} student{pendingApplications === 1 ? ' has' : 's have'} applied to your Gurukul Path{pendingApplications === 1 ? '' : 's'}.{' '}
+              <Link href="/teacher/offerings" className="text-maroon-mid hover:underline">Review applications →</Link>
+            </div>
+          </Section>
+        ) : null}
+
+        <Section title="Upcoming sessions" count={upcoming.length + scheduledSessions.length}>
+          {upcoming.length === 0 && scheduledSessions.length === 0 ? (
             <Empty>No confirmed sessions on the horizon.</Empty>
           ) : (
-            <BookingList
-              bookings={upcoming}
-              renderActions={(b) => <JoinLink bookingId={b.id} scheduledAt={b.scheduled_at} />}
-            />
+            <ul className="divide-y divide-line border border-line rounded-lg bg-parchment overflow-hidden">
+              {scheduledSessions.map((s) => {
+                const dt = new Date(s.scheduled_at);
+                const mins = (dt.getTime() - Date.now()) / 60000;
+                const label = s.enrollment?.offering?.title ?? 'Session';
+                return (
+                  <li key={s.id} className="flex flex-wrap items-center gap-3 px-4 py-3">
+                    <div className="flex-1 min-w-[200px]">
+                      <p className="font-medium text-ink">{s.student.full_name}</p>
+                      <p className="text-sm text-muted-warm">
+                        {dt.toLocaleString('en-IN', { weekday: 'short', day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit', hour12: true })} · {s.duration_minutes}min
+                        <span className="ml-2 text-xs px-1.5 py-0.5 rounded bg-parchment-2 text-muted-warm">{label}{s.session_number ? ` · #${s.session_number}` : ''}</span>
+                      </p>
+                    </div>
+                    {mins <= 15
+                      ? <Link href={`/session/s/${s.id}`} className="text-sm px-3 py-1.5 rounded bg-maroon-mid text-parchment hover:bg-maroon">Join room</Link>
+                      : <span className="text-xs text-muted-warm">Opens 15 min before</span>}
+                  </li>
+                );
+              })}
+              {upcoming.map((b) => {
+                const when = b.scheduled_at ? new Date(b.scheduled_at).toLocaleString('en-IN', { weekday: 'short', day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit', hour12: true }) : 'No time set';
+                const mins = b.scheduled_at ? (new Date(b.scheduled_at).getTime() - Date.now()) / 60000 : 999;
+                return (
+                  <li key={b.id} className="flex flex-wrap items-center gap-3 px-4 py-3">
+                    <div className="flex-1 min-w-[200px]">
+                      <p className="font-medium text-ink">{b.student.full_name}</p>
+                      <p className="text-sm text-muted-warm">{when} · {b.duration_minutes}min{b.is_trial && <span className="ml-2 text-xs px-1.5 py-0.5 rounded bg-gold/20 text-gold">Trial</span>}</p>
+                    </div>
+                    {mins <= 15
+                      ? <Link href={`/session/${b.id}`} className="text-sm px-3 py-1.5 rounded bg-maroon-mid text-parchment hover:bg-maroon">Join room</Link>
+                      : <span className="text-xs text-muted-warm">Opens 15 min before</span>}
+                  </li>
+                );
+              })}
+            </ul>
           )}
         </Section>
 
@@ -145,31 +204,12 @@ export default async function TeacherDashboardPage() {
         </Section>
 
         <div className="mt-12 grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          <NavCard
-            href="/teacher/profile"
-            title="Profile & availability"
-            sub="Edit your bio, fee, slots"
-          />
-          <NavCard
-            href="/teacher/offerings"
-            title="Workshops & Programmes"
-            sub="Create Riyaaz Workshops & Gurukul Paths"
-          />
-          <NavCard
-            href="/teacher/homework"
-            title="Homework inbox"
-            sub={pendingReviewCount && pendingReviewCount > 0 ? `${pendingReviewCount} awaiting review` : 'Review student submissions'}
-          />
-          <NavCard
-            href="/teacher/voice-repo"
-            title="Voice Repo"
-            sub="Reference recordings for students"
-          />
-          <NavCard
-            href="/teacher/earnings"
-            title="Earnings"
-            sub="Pending and paid payouts"
-          />
+          <NavCard href="/teacher/profile" title="Profile & availability" sub="Edit your bio, fee, slots" />
+          <NavCard href="/teacher/offerings" title="Workshops & Programmes" sub={pendingApplications && pendingApplications > 0 ? `${pendingApplications} application${pendingApplications === 1 ? '' : 's'} waiting` : 'Create Workshops & Gurukul Paths'} />
+          <NavCard href="/teacher/homework" title="Homework inbox" sub={pendingReviewCount && pendingReviewCount > 0 ? `${pendingReviewCount} awaiting review` : 'Review student submissions'} />
+          <NavCard href="/teacher/voice-repo" title="Voice Repo" sub="Reference recordings for students" />
+          <NavCard href="/teacher/holidays" title="Holidays" sub="Mark days off (bulk scheduling skips them)" />
+          <NavCard href="/teacher/earnings" title="Earnings" sub="Pending and paid payouts" />
         </div>
       </main>
     </div>
@@ -277,20 +317,6 @@ function BookingList({
         );
       })}
     </ul>
-  );
-}
-
-function JoinLink({ bookingId, scheduledAt }: { bookingId: string; scheduledAt: string | null }) {
-  // Show "Join" 15 min before scheduled time.
-  if (!scheduledAt) return null;
-  const minsUntil = (new Date(scheduledAt).getTime() - Date.now()) / 60000;
-  if (minsUntil > 15) {
-    return <span className="text-xs text-muted-warm">Opens 15 min before</span>;
-  }
-  return (
-    <Link href={`/session/${bookingId}`} className="text-sm px-3 py-1.5 rounded bg-maroon-mid text-parchment hover:bg-maroon">
-      Join room
-    </Link>
   );
 }
 

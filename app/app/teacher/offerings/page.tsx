@@ -100,7 +100,11 @@ export default async function TeacherOfferingsPage() {
                       </p>
                       {o.rejection_note && <p className="text-xs text-red-700 mt-1.5">Rejected: {o.rejection_note}</p>}
                       {o.description && <p className="text-sm text-ink mt-2 line-clamp-2">{o.description}</p>}
-                      <div className="mt-3"><OfferingTeacherActions id={o.id} isActive={o.is_active} /></div>
+                      <div className="mt-3 flex flex-wrap items-center gap-3">
+                        <Link href={`/teacher/offerings/${o.id}`} className="text-xs text-maroon-mid hover:underline">Manage &amp; enrolments →</Link>
+                        <span className="text-muted-warm text-xs">·</span>
+                        <OfferingTeacherActions id={o.id} isActive={o.is_active} />
+                      </div>
                     </div>
                   </div>
                 </div>

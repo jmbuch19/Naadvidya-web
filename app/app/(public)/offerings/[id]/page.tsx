@@ -2,8 +2,9 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { getPublicOffering } from '@/lib/supabase/offerings-queries';
 import { OFFERING_LABELS, levelRangeLabel } from '@/lib/offerings';
-
-export const revalidate = 60;
+import { createClient } from '@/lib/supabase/server';
+import { EnrollButton } from '@/components/enrollments/EnrollButton';
+import { GurukulApplyForm } from '@/components/enrollments/GurukulApplyForm';
 
 interface PageProps { params: { id: string } }
 
@@ -20,6 +21,24 @@ export default async function OfferingDetailPage({ params }: PageProps) {
   const isWorkshop = o.offering_type === 'riyaaz_workshop';
   const isGurukul = o.offering_type === 'gurukul_path';
   const schedule = Array.isArray(o.session_schedule) ? o.session_schedule : [];
+  const n = o.total_sessions ?? schedule.length;
+  const workshopStarted = isWorkshop && schedule.length > 0 && new Date(schedule[0]).getTime() <= Date.now();
+
+  // Is the current viewer (if signed in) already enrolled/applied?
+  let myEnrolment: 'pending' | 'active' | 'paused' | 'declined' | null = null;
+  let isStudent = true;
+  try {
+    const sb = createClient();
+    const { data: { user } } = await sb.auth.getUser();
+    if (user) {
+      const { data: prof } = await sb.from('profiles').select('role').eq('id', user.id).maybeSingle<{ role: string }>();
+      isStudent = !prof?.role || prof.role === 'student';
+      const { data: enr } = await sb
+        .from('enrollments').select('status').eq('offering_id', o.id).eq('student_id', user.id)
+        .in('status', ['pending', 'active', 'paused', 'declined']).order('created_at', { ascending: false }).limit(1).maybeSingle<{ status: 'pending' | 'active' | 'paused' | 'declined' }>();
+      myEnrolment = enr?.status ?? null;
+    }
+  } catch { /* anon / not configured — fine */ }
 
   return (
     <article className="max-w-3xl mx-auto px-6 py-12">
@@ -84,19 +103,38 @@ export default async function OfferingDetailPage({ params }: PageProps) {
       )}
 
       <section className="mt-10 rounded-lg border border-line bg-parchment-2 p-6">
-        <h2 className="font-display text-xl text-maroon mb-1">
-          {isGurukul ? 'Applying to this Gurukul Path' : 'Joining this workshop'}
+        <h2 className="font-display text-xl text-maroon mb-2">
+          {isGurukul ? 'Apply to this Gurukul Path' : 'Join this workshop'}
         </h2>
-        <p className="text-muted-warm text-sm">
-          {isGurukul
-            ? 'Gurukul enrolment is by application — you share a short note about your background and the teacher accepts you for their programme. '
-            : 'Enrolment reserves one credit per session and locks in your seat. '}
-          Enrolment opens here shortly. In the meantime you can{' '}
+
+        {!isStudent ? (
+          <p className="text-muted-warm text-sm">Enrolment is for students. (You&rsquo;re signed in as a teacher/admin.)</p>
+        ) : isGurukul ? (
+          <>
+            <p className="text-muted-warm text-sm mb-3">
+              By application — you share a short note about your background and what you hope to learn,
+              and the teacher accepts you. Once accepted, they set up your recurring schedule and the
+              term&rsquo;s credits are reserved.
+            </p>
+            <GurukulApplyForm offeringId={o.id} alreadyApplied={myEnrolment} />
+          </>
+        ) : workshopStarted ? (
+          <p className="text-muted-warm text-sm">This workshop has already started — no late entry. {o.teacher.slug && <Link href={`/teachers/${o.teacher.slug}`} className="text-maroon-mid hover:underline">See the teacher&rsquo;s other offerings</Link>}.</p>
+        ) : (
+          <>
+            <p className="text-muted-warm text-sm mb-3">
+              Enrolling reserves {n} credit{n === 1 ? '' : 's'} (one per session) and locks in all session dates above.
+            </p>
+            <EnrollButton offeringId={o.id} sessions={n} alreadyEnrolled={myEnrolment === 'active' || myEnrolment === 'paused'} />
+          </>
+        )}
+
+        <p className="text-muted-warm text-xs mt-4">
+          Not ready? You can also{' '}
           {o.teacher.slug
             ? <Link href={`/book/${o.teacher.id}?trial=1`} className="text-maroon-mid hover:underline">book a free 15-min trial with {o.teacher.profile.full_name.split(' ')[0]}</Link>
             : 'browse other teachers'}
-          {' '}or{' '}
-          <Link href="/teachers" className="text-maroon-mid hover:underline">a one-off Mehfil session</Link>.
+          {' '}or a <Link href="/teachers" className="text-maroon-mid hover:underline">one-off Mehfil session</Link>.
         </p>
       </section>
     </article>
