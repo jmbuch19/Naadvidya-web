@@ -26,3 +26,7 @@ desktop.ini
 # Restore it as a template (delete real values) before removing this line.
 naadvidya.env.example
 naadvidya.env
+
+# Razorpay key CSVs downloaded from dashboard — contain live secrets.
+rzp-key*.csv
+*key*.csv
