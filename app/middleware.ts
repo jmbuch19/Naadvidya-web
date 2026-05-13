@@ -8,7 +8,7 @@ export async function middleware(request: NextRequest) {
 export const config = {
   matcher: [
     // Skip Next.js internals, static files, the public PWA files (sw.js, manifest),
-    // and the Razorpay webhook (which uses its own HMAC signature, not session cookies).
-    '/((?!_next/static|_next/image|favicon.ico|sw\\.js|manifest\\.webmanifest|icon|apple-icon|api/payments/webhook|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|woff|woff2)$).*)',
+    // the Razorpay webhook (own HMAC signature), and the cron routes (own CRON_SECRET).
+    '/((?!_next/static|_next/image|favicon.ico|sw\\.js|manifest\\.webmanifest|icon|apple-icon|api/payments/webhook|api/cron|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|woff|woff2)$).*)',
   ],
 };

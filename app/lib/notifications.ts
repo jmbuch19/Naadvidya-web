@@ -42,6 +42,38 @@ interface Recipient {
   whatsappOptedIn?: boolean;
 }
 
+export function fmtWhen(d: Date): string {
+  return d.toLocaleString('en-IN', { weekday: 'long', day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit', hour12: true }) + ' IST';
+}
+
+// --- Session reminders (used by the cron jobs) ---
+
+export async function notifyUpcomingSession(opts: {
+  recipient: Recipient;
+  isTeacher: boolean;
+  withWhom: string;          // the other party's name
+  scheduledAt: Date;
+  kind: '24hr' | '1hr' | 'start';
+  joinHref: string;          // dashboard or session page
+}) {
+  const when = fmtWhen(opts.scheduledAt);
+  const heading = opts.kind === '24hr' ? 'Session tomorrow' : opts.kind === '1hr' ? 'Session in about an hour' : 'Your session is starting';
+  const lead =
+    opts.kind === '24hr' ? `a reminder that you have a session ${opts.isTeacher ? `with ${opts.withWhom}` : `with ${opts.withWhom}`} coming up`
+    : opts.kind === '1hr' ? `your session ${opts.isTeacher ? `with ${opts.withWhom}` : `with ${opts.withWhom}`} begins in about an hour`
+    : `your session ${opts.isTeacher ? `with ${opts.withWhom}` : `with ${opts.withWhom}`} is starting now`;
+  await sendEmail({
+    to: opts.recipient.email,
+    subject: opts.kind === 'start' ? `Starting now — your session with ${opts.withWhom} 🎵` : `${heading} — with ${opts.withWhom}`,
+    html: emailLayout({
+      greeting: `Namaste, ${escapeHtml(opts.recipient.fullName)}.`,
+      body: `<p>This is ${lead}.</p><p><strong>${escapeHtml(when)}</strong></p><p>The room ${opts.kind === 'start' ? 'is open' : 'opens 15 minutes before'} — join from your dashboard.</p>`,
+      cta: { label: opts.kind === 'start' ? 'Join now' : 'Open dashboard', href: `${APP_URL}${opts.joinHref}` },
+    }),
+    text: `${heading}: with ${opts.withWhom}, ${when}. ${APP_URL}${opts.joinHref}`,
+  });
+}
+
 // --- Booking lifecycle ---
 
 export async function notifyNewBookingRequest(opts: {
