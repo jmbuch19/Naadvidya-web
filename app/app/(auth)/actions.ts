@@ -2,7 +2,7 @@
 
 import { redirect } from 'next/navigation';
 import { headers } from 'next/headers';
-import { createClient } from '@/lib/supabase/server';
+import { createClient, createServiceRoleClient } from '@/lib/supabase/server';
 import type { Role } from '@/lib/supabase/types';
 
 // Build an absolute origin from the request headers (works on Vercel even if
@@ -49,6 +49,20 @@ export async function registerAction(formData: FormData) {
 
   const supabase = createClient();
 
+  // One person, one role, one email. Reject if a profile already exists for this email
+  // (case-insensitive) BEFORE creating a duplicate auth.users row. The
+  // profiles_email_lower_unique index also enforces this at the DB level as a backstop.
+  const { data: existing } = await supabase
+    .from('profiles')
+    .select('role')
+    .ilike('email', email)
+    .maybeSingle<{ role: 'owner_admin' | 'teacher' | 'student' }>();
+
+  if (existing) {
+    const roleLabel = existing.role === 'owner_admin' ? 'an admin' : `a ${existing.role}`;
+    redirect(`/register?error=${encodeURIComponent(`An account already exists for this email as ${roleLabel}. Sign in instead, or use a different email.`)}`);
+  }
+
   const { data, error } = await supabase.auth.signUp({
     email,
     password,
@@ -66,9 +80,15 @@ export async function registerAction(formData: FormData) {
     redirect(`/register?info=${encodeURIComponent('Check your inbox to confirm your email, then sign in.')}`);
   }
 
-  // Create the profiles row (RLS allows: user inserts own profile).
-  // role defaults to whatever they picked; owner_admin is set manually via the Amee seed migration.
-  const { error: profileError } = await supabase.from('profiles').insert({
+  // Profile + teacher_profile inserts run with the service-role key. The cookie-bound
+  // client can't insert here when email confirmation is on: signUp creates the auth.users
+  // row but does NOT establish a session, so auth.uid() is null and the RLS policy
+  // (auth.uid() = id) rejects the insert silently — leaving an orphan auth user with no
+  // profile. owner_admin can still only be set via the seed migration; this endpoint
+  // hard-rejects that role above.
+  const admin = createServiceRoleClient();
+
+  const { error: profileError } = await admin.from('profiles').insert({
     id: data.user.id,
     full_name: fullName,
     email,
@@ -80,9 +100,8 @@ export async function registerAction(formData: FormData) {
     redirect(`/register?error=${encodeURIComponent('Account created but profile setup failed: ' + profileError.message)}`);
   }
 
-  // If teacher, create the pending teacher_profile too
   if (role === 'teacher') {
-    await supabase.from('teacher_profiles').insert({
+    await admin.from('teacher_profiles').insert({
       profile_id: data.user.id,
       bio: '',
       session_fee_inr: 800,

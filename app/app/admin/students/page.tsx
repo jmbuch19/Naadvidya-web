@@ -1,6 +1,7 @@
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { createClient } from '@/lib/supabase/server';
+import { ChangeRoleButton } from '@/components/admin/ChangeRoleButton';
 import { logoutAction } from '../../(auth)/actions';
 
 export const metadata = { title: 'Admin · Students — Naadvidya' };
@@ -75,6 +76,7 @@ export default async function AdminStudentsPage() {
                   <th className="py-2 pr-3 text-right">Credits</th>
                   <th className="py-2 pr-3 text-right">Sessions</th>
                   <th className="py-2 pr-3 text-right">Joined</th>
+                  <th className="py-2 pr-3 text-right">Action</th>
                 </tr>
               </thead>
               <tbody>
@@ -89,6 +91,9 @@ export default async function AdminStudentsPage() {
                       <td className="py-2 pr-3 text-right text-muted-warm">{s.bookings?.length ?? 0}</td>
                       <td className="py-2 pr-3 text-right text-muted-warm text-xs">
                         {new Date(s.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: '2-digit' })}
+                      </td>
+                      <td className="py-2 pr-3 text-right">
+                        <ChangeRoleButton profileId={s.id} fullName={s.full_name} currentRole="student" />
                       </td>
                     </tr>
                   );
