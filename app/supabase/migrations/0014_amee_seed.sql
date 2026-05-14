@@ -1,15 +1,61 @@
 -- Migration 0014 — Amee seed (RUN MANUALLY AFTER AMEE SIGNS UP)
 --
--- This migration is intentionally commented out. After Amee registers on the live
--- platform with her real email, run this SQL (replacing the email) ONCE in the
--- Supabase SQL editor to elevate her account to owner_admin with is_owner=true.
+-- After Amee registers on the live platform, run this in the Supabase SQL
+-- editor with her actual email substituted. It does THREE things, all
+-- required for /admin/* to unlock + for her teacher card to show on
+-- /teachers:
 --
--- Without this, the platform has no admin user and the admin dashboard is locked.
+--   1. profiles.role = 'owner_admin', is_owner = true.
+--   2. auth.users.raw_app_meta_data.role = 'owner_admin' (needed since 0028 —
+--      is_owner_admin() reads from the JWT, not from profiles).
+--   3. teacher_profiles: approval_status='approved', is_visible=true, slug
+--      set. Must temporarily disable triggers because the 0027
+--      teacher_profiles_guard trigger blocks approval-column changes from any
+--      caller without a service_role JWT claim, and the Supabase SQL
+--      editor / Management API don't carry one.
+--
+-- IMPORTANT: Amee must SIGN OUT and back IN after this runs — the JWT-based
+-- admin check only kicks in on the NEXT login (new JWT picks up the
+-- raw_app_meta_data change).
 
--- UPDATE profiles
--- SET role = 'owner_admin', is_owner = true
--- WHERE email = 'amee@naadvidya.in';
+-- DO $$
+-- DECLARE amee_id uuid;
+-- BEGIN
+--   SELECT id INTO amee_id FROM auth.users WHERE LOWER(email) = 'amee@naadvidya.in';
+--   IF amee_id IS NULL THEN
+--     RAISE EXCEPTION 'Amee email not found in auth.users — has she registered yet?';
+--   END IF;
+--
+--   UPDATE public.profiles
+--      SET role = 'owner_admin', is_owner = true, updated_at = now()
+--    WHERE id = amee_id;
+--
+--   UPDATE auth.users
+--      SET raw_app_meta_data = coalesce(raw_app_meta_data, '{}'::jsonb)
+--                              || jsonb_build_object('role', 'owner_admin')
+--    WHERE id = amee_id;
+--
+--   -- Triggers off briefly so teacher_profiles_guard doesn't revert these.
+--   SET LOCAL session_replication_role = 'replica';
+--   UPDATE public.teacher_profiles
+--      SET approval_status = 'approved',
+--          is_visible      = true,
+--          approved_by     = amee_id,
+--          approved_at     = now(),
+--          slug            = coalesce(slug, 'amee-buch'),
+--          rejection_note  = NULL,
+--          updated_at      = now()
+--    WHERE profile_id = amee_id;
+-- END $$;
 
--- Sanity check after running:
--- SELECT id, full_name, email, role, is_owner FROM profiles WHERE is_owner = true;
--- Expected: exactly one row.
+-- Sanity check after running (should show role=owner_admin, is_owner=true,
+-- jwt_role=owner_admin, approval_status=approved, is_visible=true):
+-- SELECT p.email, p.role, p.is_owner,
+--        u.raw_app_meta_data ->> 'role' AS jwt_role,
+--        tp.approval_status, tp.is_visible, tp.slug
+--   FROM auth.users u
+--   JOIN public.profiles p ON p.id = u.id
+--   LEFT JOIN public.teacher_profiles tp ON tp.profile_id = p.id
+--  WHERE p.is_owner = true;
+
+-- Applied 2026-05-14 on live project hjaygosjihepgdzcxvve for ameedeep@gmail.com.
