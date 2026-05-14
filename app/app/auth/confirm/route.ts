@@ -9,7 +9,7 @@ import { createClient } from '@/lib/supabase/server';
 
 type OtpType = 'signup' | 'invite' | 'magiclink' | 'recovery' | 'email_change' | 'email';
 
-const ALLOWED_TYPES: ReadonlySet<OtpType> = new Set([
+const ALLOWED_TYPES = new Set<OtpType>([
   'signup', 'invite', 'magiclink', 'recovery', 'email_change', 'email',
 ]);
 
