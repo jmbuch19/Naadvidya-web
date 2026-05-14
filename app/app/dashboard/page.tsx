@@ -44,8 +44,13 @@ export default async function DashboardPage({ searchParams }: { searchParams: { 
     .eq('id', user.id)
     .maybeSingle<{ full_name: string; role: 'owner_admin' | 'teacher' | 'student'; is_owner: boolean }>();
 
-  if (profile?.role === 'owner_admin') redirect('/admin/dashboard');
-  if (profile?.role === 'teacher') redirect('/teacher/dashboard');
+  // If profile is missing, the session is referring to a user without a row in
+  // our app schema (cleanup race, deleted profile, RLS regression). Force a
+  // re-auth rather than rendering the student dashboard with a generic fallback.
+  if (!profile) redirect('/login?error=Your+session+is+incomplete.+Sign+in+again.');
+
+  if (profile.role === 'owner_admin') redirect('/admin/dashboard');
+  if (profile.role === 'teacher') redirect('/teacher/dashboard');
 
   const [{ data: creditsRow }, { data: bookings }, { data: enrollments }, { data: scheduled }] = await Promise.all([
     supabase
@@ -137,7 +142,7 @@ export default async function DashboardPage({ searchParams }: { searchParams: { 
         <div className="flex flex-wrap items-end justify-between mb-10 gap-4">
           <div>
             <p className="text-sm text-gold uppercase tracking-widest mb-1">Your sadhana</p>
-            <h1 className="font-display text-4xl text-maroon">Namaste, {profile?.full_name ?? 'sadhak'}</h1>
+            <h1 className="font-display text-4xl text-maroon">Namaste, {profile.full_name}</h1>
           </div>
           <div className="bg-parchment-2 border border-line rounded-lg px-6 py-3 text-right">
             <p className="text-xs text-muted-warm uppercase tracking-widest">Balance</p>
