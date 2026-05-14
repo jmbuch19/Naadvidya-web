@@ -54,10 +54,12 @@ export async function registerAction(formData: FormData) {
 
   const supabase = createClient();
 
-  // One person, one role, one email. Reject if a profile already exists for this email
-  // (case-insensitive) BEFORE creating a duplicate auth.users row. The
-  // profiles_email_lower_unique index also enforces this at the DB level as a backstop.
-  const { data: existing } = await supabase
+  // One person, one role, one email. Pre-check must use service-role: the post-0027
+  // profiles SELECT policy hides rows from anonymous callers (anti-scraping), so the
+  // cookie client wouldn't see an existing profile and signUp would race into a pkey
+  // collision when Supabase returns the existing unconfirmed user id.
+  const adminPrecheck = createServiceRoleClient();
+  const { data: existing } = await adminPrecheck
     .from('profiles')
     .select('role')
     .ilike('email', email)
@@ -92,6 +94,20 @@ export async function registerAction(formData: FormData) {
   // profile. owner_admin can still only be set via the seed migration; this endpoint
   // hard-rejects that role above.
   const admin = createServiceRoleClient();
+
+  // Safety: if signUp returned an existing user id (can happen when the email is
+  // already registered but unconfirmed, or on stale form re-submits), don't
+  // collide on the pkey — direct them to sign in instead.
+  const { data: existingByPk } = await admin
+    .from('profiles')
+    .select('id, role')
+    .eq('id', data.user.id)
+    .maybeSingle<{ id: string; role: string }>();
+
+  if (existingByPk) {
+    const roleLabel = existingByPk.role === 'owner_admin' ? 'an admin' : `a ${existingByPk.role}`;
+    redirect(`/register?error=${encodeURIComponent(`An account already exists for this email as ${roleLabel}. Sign in instead.`)}`);
+  }
 
   const { error: profileError } = await admin.from('profiles').insert({
     id: data.user.id,
