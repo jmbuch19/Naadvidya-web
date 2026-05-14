@@ -79,6 +79,18 @@ export default function RegisterPage({ searchParams }: PageProps) {
           <span className="block mt-1 text-xs text-muted-warm">Minimum 8 characters.</span>
         </label>
 
+        <label className="block">
+          <span className="text-sm text-ink">Confirm password</span>
+          <input
+            name="password_confirm"
+            type="password"
+            required
+            minLength={8}
+            autoComplete="new-password"
+            className="mt-1 w-full px-3 py-2 rounded border border-line bg-parchment focus:outline-none focus:border-maroon-mid"
+          />
+        </label>
+
         <button type="submit" className="btn-primary w-full">Create account</button>
       </form>
 

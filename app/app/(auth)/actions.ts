@@ -36,11 +36,16 @@ export async function registerAction(formData: FormData) {
   const fullName = String(formData.get('full_name') ?? '').trim();
   const email = String(formData.get('email') ?? '').trim().toLowerCase();
   const password = String(formData.get('password') ?? '');
+  const passwordConfirm = String(formData.get('password_confirm') ?? '');
   const role = String(formData.get('role') ?? 'student') as Role;
   const detectedTz = String(formData.get('timezone') ?? 'Asia/Kolkata');
 
   if (!fullName || !email || password.length < 8) {
     redirect(`/register?error=${encodeURIComponent('Please provide your name, email and a password of at least 8 characters.')}`);
+  }
+
+  if (password !== passwordConfirm) {
+    redirect(`/register?error=${encodeURIComponent('Passwords do not match.')}`);
   }
 
   if (role !== 'student' && role !== 'teacher') {
@@ -106,6 +111,14 @@ export async function registerAction(formData: FormData) {
       bio: '',
       session_fee_inr: 800,
     });
+  }
+
+  // When email confirmation is required (Supabase mailer_autoconfirm=false), signUp
+  // returns a user but no session. Sending the user to /dashboard would silently bounce
+  // them through /login. Instead, surface a clear "check your inbox" page; the
+  // confirmation link will land on /api/auth/callback which establishes the session.
+  if (!data.session) {
+    redirect(`/register?info=${encodeURIComponent(`We've sent a confirmation link to ${email}. Click it to finish signing in.`)}`);
   }
 
   redirect('/dashboard');
