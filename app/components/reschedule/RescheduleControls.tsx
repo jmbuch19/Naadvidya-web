@@ -112,7 +112,7 @@ export function RescheduleControls(props: Props) {
         <div className="flex-1 min-w-[200px]">
           <span className="text-muted-warm">Reschedule proposed:</span>{' '}
           <strong className="text-ink">{fmt(props.proposedNewAt!)}</strong>
-          {props.proposalReason && <em className="block text-muted-warm mt-0.5">"{props.proposalReason}"</em>}
+          {props.proposalReason && <em className="block text-muted-warm mt-0.5">&ldquo;{props.proposalReason}&rdquo;</em>}
         </div>
         <button
           disabled={busy}
