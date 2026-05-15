@@ -321,6 +321,109 @@ export async function notifyTeacherRejected(opts: { teacher: Recipient; reason: 
   ]);
 }
 
+// --- Reschedule flow (SCHEDULING_HOLIDAY_POLICY §2) ---
+// Email only — no WhatsApp templates approved yet for reschedule events.
+
+export async function notifyReschedulProposed(opts: {
+  recipient: Recipient;
+  proposerName: string;
+  oldScheduledAt: Date;
+  proposedNewAt: Date;
+  reason: string;
+  dashboardHref: string;
+}) {
+  const oldWhen = fmtWhen(opts.oldScheduledAt);
+  const newWhen = fmtWhen(opts.proposedNewAt);
+  await sendEmail({
+    to: opts.recipient.email,
+    subject: `Reschedule proposal from ${opts.proposerName}`,
+    html: emailLayout({
+      greeting: `Namaste, ${escapeHtml(opts.recipient.fullName)}.`,
+      body: `
+        <p><strong>${escapeHtml(opts.proposerName)}</strong> has proposed to reschedule your session.</p>
+        <p style="margin:8px 0;color:#7A6652;">From: ${escapeHtml(oldWhen)}<br>To: <strong>${escapeHtml(newWhen)}</strong></p>
+        <p style="margin:8px 0;"><em>${escapeHtml(opts.reason)}</em></p>
+        <p>Please accept or decline within 24 hours. If you don't respond, the original time stands.</p>
+      `,
+      cta: { label: 'Review proposal', href: opts.dashboardHref },
+    }),
+  });
+}
+
+export async function notifyRescheduleAccepted(opts: {
+  recipient: Recipient;
+  responderName: string;
+  newScheduledAt: Date;
+  dashboardHref: string;
+}) {
+  const newWhen = fmtWhen(opts.newScheduledAt);
+  await sendEmail({
+    to: opts.recipient.email,
+    subject: `Reschedule accepted — new time confirmed`,
+    html: emailLayout({
+      greeting: `Namaste, ${escapeHtml(opts.recipient.fullName)}.`,
+      body: `
+        <p><strong>${escapeHtml(opts.responderName)}</strong> accepted your reschedule request.</p>
+        <p>New session time: <strong>${escapeHtml(newWhen)}</strong></p>
+        <p>The video room will be ready 15 minutes before start.</p>
+      `,
+      cta: { label: 'Open dashboard', href: opts.dashboardHref },
+    }),
+  });
+}
+
+export async function notifyRescheduleDeclined(opts: {
+  recipient: Recipient;
+  responderName: string;
+  originalScheduledAt: Date;
+  dashboardHref: string;
+}) {
+  const when = fmtWhen(opts.originalScheduledAt);
+  await sendEmail({
+    to: opts.recipient.email,
+    subject: `Reschedule declined — original time stands`,
+    html: emailLayout({
+      greeting: `Namaste, ${escapeHtml(opts.recipient.fullName)}.`,
+      body: `
+        <p><strong>${escapeHtml(opts.responderName)}</strong> declined the reschedule. Your original session at <strong>${escapeHtml(when)}</strong> still stands.</p>
+      `,
+      cta: { label: 'Open dashboard', href: opts.dashboardHref },
+    }),
+  });
+}
+
+// --- Holiday-affected sessions (SCHEDULING_HOLIDAY_POLICY §4.3) ---
+
+export async function notifyHolidayCancellation(opts: {
+  student: Recipient;
+  teacherName: string;
+  scheduledAt: Date;
+  holidayDate: string; // YYYY-MM-DD
+}) {
+  const when = fmtWhen(opts.scheduledAt);
+  await Promise.allSettled([
+    sendEmail({
+      to: opts.student.email,
+      subject: `Session cancelled — ${opts.teacherName} marked a holiday`,
+      html: emailLayout({
+        greeting: `Namaste, ${escapeHtml(opts.student.fullName)}.`,
+        body: `
+          <p>Your session with <strong>${escapeHtml(opts.teacherName)}</strong> on <strong>${escapeHtml(when)}</strong> has been cancelled — the teacher marked ${escapeHtml(opts.holidayDate)} as a holiday.</p>
+          <p>Your credit has been refunded. You can rebook a different slot anytime.</p>
+        `,
+        cta: { label: 'Rebook', href: `${APP_URL}/teachers` },
+      }),
+    }),
+    waBookingCancelledByTeacher({
+      to: opts.student.whatsappNumber ?? '',
+      optedIn: opts.student.whatsappOptedIn ?? false,
+      studentName: opts.student.fullName,
+      teacherName: opts.teacherName,
+      date: opts.scheduledAt.toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'short' }),
+    }),
+  ]);
+}
+
 // --- Credits (already partially wired in webhook/verify; keep as wrapper) ---
 
 export { emailCreditsCredited };

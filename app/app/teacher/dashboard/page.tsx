@@ -2,6 +2,7 @@ import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { createClient } from '@/lib/supabase/server';
 import { BookingActions } from '@/components/teacher/BookingActions';
+import { RescheduleControls } from '@/components/reschedule/RescheduleControls';
 import { logoutAction } from '../../(auth)/actions';
 
 export const metadata = { title: 'Teacher dashboard — Naadvidya' };
@@ -22,6 +23,10 @@ interface BookingRow {
   is_trial: boolean;
   status: 'pending' | 'confirmed' | 'cancelled' | 'completed' | 'no_show';
   notes_to_teacher: string | null;
+  reschedule_count: number;
+  reschedule_proposed_by: string | null;
+  reschedule_proposed_new_at: string | null;
+  reschedule_proposal_reason: string | null;
   student: { full_name: string; email: string };
 }
 
@@ -66,6 +71,7 @@ export default async function TeacherDashboardPage() {
     .from('bookings')
     .select(`
       id, scheduled_at, duration_minutes, is_trial, status, notes_to_teacher,
+      reschedule_count, reschedule_proposed_by, reschedule_proposed_new_at, reschedule_proposal_reason,
       student:profiles!bookings_student_id_fkey(full_name, email),
       assignments(id)
     `)
@@ -87,6 +93,7 @@ export default async function TeacherDashboardPage() {
       .from('scheduled_sessions')
       .select(`
         id, scheduled_at, duration_minutes, session_number, status,
+        reschedule_count, reschedule_proposed_by, reschedule_proposed_new_at, reschedule_proposal_reason,
         student:profiles!scheduled_sessions_student_id_fkey(full_name),
         enrollment:enrollments!scheduled_sessions_enrollment_id_fkey(offering:class_offerings!enrollments_offering_id_fkey(title))
       `)
@@ -94,7 +101,7 @@ export default async function TeacherDashboardPage() {
       .eq('status', 'upcoming')
       .order('scheduled_at', { ascending: true })
       .limit(12)
-      .returns<{ id: string; scheduled_at: string; duration_minutes: number; session_number: number | null; status: string; student: { full_name: string }; enrollment: { offering: { title: string } } | null }[]>(),
+      .returns<{ id: string; scheduled_at: string; duration_minutes: number; session_number: number | null; status: string; reschedule_count: number; reschedule_proposed_by: string | null; reschedule_proposed_new_at: string | null; reschedule_proposal_reason: string | null; student: { full_name: string }; enrollment: { offering: { title: string } } | null }[]>(),
     supabase.from('teacher_payout_details').select('payout_method').eq('teacher_id', teacher.id).maybeSingle<{ payout_method: string | null }>(),
   ]);
   const scheduledSessions = scheduled ?? [];
@@ -163,6 +170,17 @@ export default async function TeacherDashboardPage() {
                         {dt.toLocaleString('en-IN', { weekday: 'short', day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit', hour12: true })} · {s.duration_minutes}min
                         <span className="ml-2 text-xs px-1.5 py-0.5 rounded bg-parchment-2 text-muted-warm">{label}{s.session_number ? ` · #${s.session_number}` : ''}</span>
                       </p>
+                      <div className="mt-2">
+                        <RescheduleControls
+                          kind="session"
+                          id={s.id}
+                          currentScheduledAt={s.scheduled_at}
+                          rescheduleCount={s.reschedule_count ?? 0}
+                          proposedNewAt={s.reschedule_proposed_new_at}
+                          proposalReason={s.reschedule_proposal_reason}
+                          isProposer={s.reschedule_proposed_by === user.id}
+                        />
+                      </div>
                     </div>
                     {mins <= 15
                       ? <Link href={`/session/s/${s.id}`} className="text-sm px-3 py-1.5 rounded bg-maroon-mid text-parchment hover:bg-maroon">Join room</Link>
@@ -178,6 +196,19 @@ export default async function TeacherDashboardPage() {
                     <div className="flex-1 min-w-[200px]">
                       <p className="font-medium text-ink">{b.student.full_name}</p>
                       <p className="text-sm text-muted-warm">{when} · {b.duration_minutes}min{b.is_trial && <span className="ml-2 text-xs px-1.5 py-0.5 rounded bg-gold/20 text-gold">Trial</span>}</p>
+                      {b.scheduled_at && (
+                        <div className="mt-2">
+                          <RescheduleControls
+                            kind="booking"
+                            id={b.id}
+                            currentScheduledAt={b.scheduled_at}
+                            rescheduleCount={b.reschedule_count ?? 0}
+                            proposedNewAt={b.reschedule_proposed_new_at}
+                            proposalReason={b.reschedule_proposal_reason}
+                            isProposer={b.reschedule_proposed_by === user.id}
+                          />
+                        </div>
+                      )}
                     </div>
                     {mins <= 15
                       ? <Link href={`/session/${b.id}`} className="text-sm px-3 py-1.5 rounded bg-maroon-mid text-parchment hover:bg-maroon">Join room</Link>

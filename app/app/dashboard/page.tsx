@@ -1,6 +1,7 @@
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { createClient } from '@/lib/supabase/server';
+import { RescheduleControls } from '@/components/reschedule/RescheduleControls';
 import { logoutAction } from '../(auth)/actions';
 
 export const metadata = { title: 'Dashboard — Naadvidya' };
@@ -11,6 +12,10 @@ interface BookingRow {
   duration_minutes: number;
   is_trial: boolean;
   status: 'pending' | 'confirmed' | 'cancelled' | 'completed' | 'no_show';
+  reschedule_count: number;
+  reschedule_proposed_by: string | null;
+  reschedule_proposed_new_at: string | null;
+  reschedule_proposal_reason: string | null;
   teacher: { profile: { full_name: string } };
 }
 
@@ -29,6 +34,10 @@ interface ScheduledRow {
   duration_minutes: number;
   session_number: number | null;
   status: string;
+  reschedule_count: number;
+  reschedule_proposed_by: string | null;
+  reschedule_proposed_new_at: string | null;
+  reschedule_proposal_reason: string | null;
   teacher: { profile: { full_name: string } };
   enrollment: { offering: { title: string } } | null;
 }
@@ -62,6 +71,7 @@ export default async function DashboardPage({ searchParams }: { searchParams: { 
       .from('bookings')
       .select(`
         id, scheduled_at, duration_minutes, is_trial, status,
+        reschedule_count, reschedule_proposed_by, reschedule_proposed_new_at, reschedule_proposal_reason,
         teacher:teacher_profiles!bookings_teacher_id_fkey(
           profile:profiles!teacher_profiles_profile_id_fkey(full_name)
         )
@@ -84,6 +94,7 @@ export default async function DashboardPage({ searchParams }: { searchParams: { 
       .from('scheduled_sessions')
       .select(`
         id, scheduled_at, duration_minutes, session_number, status,
+        reschedule_count, reschedule_proposed_by, reschedule_proposed_new_at, reschedule_proposal_reason,
         teacher:teacher_profiles!scheduled_sessions_teacher_id_fkey(profile:profiles!teacher_profiles_profile_id_fkey(full_name)),
         enrollment:enrollments!scheduled_sessions_enrollment_id_fkey(offering:class_offerings!enrollments_offering_id_fkey(title))
       `)
@@ -162,9 +173,9 @@ export default async function DashboardPage({ searchParams }: { searchParams: { 
             </Empty>
           ) : (
             <ul className="divide-y divide-line border border-line rounded-lg bg-parchment overflow-hidden">
-              {scheduledSessions.map((s) => <ScheduledSessionRow key={s.id} s={s} />)}
+              {scheduledSessions.map((s) => <ScheduledSessionRow key={s.id} s={s} callerId={user.id} />)}
               {[...upcoming, ...pending].map((b) => (
-                <BookingRow key={b.id} booking={b} canJoin={b.status === 'confirmed'} />
+                <BookingRow key={b.id} booking={b} canJoin={b.status === 'confirmed'} callerId={user.id} />
               ))}
             </ul>
           )}
@@ -193,7 +204,7 @@ export default async function DashboardPage({ searchParams }: { searchParams: { 
           <Section title="Past sessions">
             <ul className="divide-y divide-line border border-line rounded-lg bg-parchment overflow-hidden">
               {past.slice(0, 10).map((b) => (
-                <BookingRow key={b.id} booking={b} canJoin={false} muted />
+                <BookingRow key={b.id} booking={b} canJoin={false} muted callerId={user.id} />
               ))}
             </ul>
           </Section>
@@ -239,7 +250,7 @@ function Empty({ children }: { children: React.ReactNode }) {
   );
 }
 
-function ScheduledSessionRow({ s }: { s: ScheduledRow }) {
+function ScheduledSessionRow({ s, callerId }: { s: ScheduledRow; callerId: string }) {
   const dt = new Date(s.scheduled_at);
   const mins = (dt.getTime() - Date.now()) / 60000;
   const showJoin = mins <= 15;
@@ -252,13 +263,24 @@ function ScheduledSessionRow({ s }: { s: ScheduledRow }) {
           {dt.toLocaleString('en-IN', { weekday: 'short', day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit', hour12: true })} · {s.duration_minutes}min
           <span className="ml-2 text-xs px-1.5 py-0.5 rounded bg-parchment-2 text-muted-warm">{label}{s.session_number ? ` · #${s.session_number}` : ''}</span>
         </p>
+        <div className="mt-2">
+          <RescheduleControls
+            kind="session"
+            id={s.id}
+            currentScheduledAt={s.scheduled_at}
+            rescheduleCount={s.reschedule_count ?? 0}
+            proposedNewAt={s.reschedule_proposed_new_at}
+            proposalReason={s.reschedule_proposal_reason}
+            isProposer={s.reschedule_proposed_by === callerId}
+          />
+        </div>
       </div>
       {showJoin && <Link href={`/session/s/${s.id}`} className="text-sm px-3 py-1.5 rounded bg-maroon-mid text-parchment hover:bg-maroon">Join room</Link>}
     </li>
   );
 }
 
-function BookingRow({ booking, canJoin, muted }: { booking: BookingRow; canJoin: boolean; muted?: boolean }) {
+function BookingRow({ booking, canJoin, muted, callerId }: { booking: BookingRow; canJoin: boolean; muted?: boolean; callerId: string }) {
   const teacherName = booking.teacher?.profile?.full_name ?? 'Teacher';
   const when = booking.scheduled_at
     ? new Date(booking.scheduled_at).toLocaleString('en-IN', {
@@ -274,6 +296,7 @@ function BookingRow({ booking, canJoin, muted }: { booking: BookingRow; canJoin:
     ? (new Date(booking.scheduled_at).getTime() - Date.now()) / 60000
     : null;
   const showJoin = canJoin && minsUntil !== null && minsUntil <= 15;
+  const showReschedule = booking.status === 'confirmed' && booking.scheduled_at && !muted;
 
   return (
     <li className={`flex flex-wrap items-center gap-3 px-4 py-3 ${muted ? 'opacity-70' : ''}`}>
@@ -284,6 +307,19 @@ function BookingRow({ booking, canJoin, muted }: { booking: BookingRow; canJoin:
           {booking.is_trial && <span className="ml-2 text-xs px-1.5 py-0.5 rounded bg-gold/20 text-gold">Trial</span>}
           <span className="ml-2 text-xs text-muted-warm capitalize">· {booking.status}</span>
         </p>
+        {showReschedule && (
+          <div className="mt-2">
+            <RescheduleControls
+              kind="booking"
+              id={booking.id}
+              currentScheduledAt={booking.scheduled_at!}
+              rescheduleCount={booking.reschedule_count ?? 0}
+              proposedNewAt={booking.reschedule_proposed_new_at}
+              proposalReason={booking.reschedule_proposal_reason}
+              isProposer={booking.reschedule_proposed_by === callerId}
+            />
+          </div>
+        )}
       </div>
       {showJoin && (
         <Link href={`/session/${booking.id}`} className="text-sm px-3 py-1.5 rounded bg-maroon-mid text-parchment hover:bg-maroon">
