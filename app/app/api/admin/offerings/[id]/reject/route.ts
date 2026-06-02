@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { createClient, createServiceRoleClient } from '@/lib/supabase/server';
+import { logAudit } from '@/lib/audit';
 
 interface Body { reason: string }
 
@@ -24,5 +25,16 @@ export async function POST(req: Request, { params }: { params: { id: string } })
     .update({ approval_status: 'rejected', is_visible: false, rejection_note: body.reason.trim(), approved_by: user.id, approved_at: new Date().toISOString() })
     .eq('id', params.id);
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+
+  await logAudit({
+    req,
+    actorId: user.id,
+    actorRole: caller?.role,
+    action: 'offering.rejected',
+    entityType: 'class_offering',
+    entityId: params.id,
+    newValue: { approval_status: 'rejected', is_visible: false, rejection_note: body.reason.trim() },
+  });
+
   return NextResponse.json({ ok: true });
 }

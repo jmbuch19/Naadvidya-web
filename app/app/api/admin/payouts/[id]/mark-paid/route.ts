@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { createClient, createServiceRoleClient } from '@/lib/supabase/server';
+import { logAudit } from '@/lib/audit';
 
 interface Body {
   paymentReference: string;
@@ -49,6 +50,17 @@ export async function POST(req: Request, { params }: { params: { id: string } })
     .eq('id', payout.id);
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+
+  await logAudit({
+    req,
+    actorId: user.id,
+    actorRole: caller?.role,
+    action: 'payout.marked_paid',
+    entityType: 'payout',
+    entityId: payout.id,
+    oldValue: { status: 'pending' },
+    newValue: { status: 'paid', payment_reference: body.paymentReference.trim() },
+  });
 
   return NextResponse.json({ id: payout.id, status: 'paid' });
 }

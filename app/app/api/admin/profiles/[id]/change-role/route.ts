@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { createClient, createServiceRoleClient } from '@/lib/supabase/server';
+import { logAudit } from '@/lib/audit';
 
 // Admin-only role flip. owner_admin can promote a student to teacher (creates a pending
 // teacher_profile if absent), or demote a teacher to student (soft-hides the
@@ -100,6 +101,17 @@ export async function POST(req: Request, { params }: { params: { id: string } })
       })
       .eq('profile_id', target.id);
   }
+
+  await logAudit({
+    req,
+    actorId: user.id,
+    actorRole: caller?.role,
+    action: 'profile.role_changed',
+    entityType: 'profile',
+    entityId: target.id,
+    oldValue: { role: target.role },
+    newValue: { role: body.role },
+  });
 
   return NextResponse.json({ ok: true, role: body.role });
 }

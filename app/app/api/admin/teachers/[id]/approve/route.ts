@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { createClient, createServiceRoleClient } from '@/lib/supabase/server';
 import { toSlug, uniqueSlug } from '@/lib/slug';
 import { notifyTeacherApproved } from '@/lib/notifications';
+import { logAudit } from '@/lib/audit';
 
 // Admin atomically: sets approval_status='approved', is_visible=true, slug,
 // approved_by, approved_at. CRITICAL RULE (CLAUDE_CODE_PROMPT §CRITICAL RULES.6):
@@ -16,7 +17,7 @@ interface TeacherRow {
   profile: { full_name: string; email: string; whatsapp_number: string | null; whatsapp_opted_in: boolean };
 }
 
-export async function POST(_req: Request, { params }: { params: { id: string } }) {
+export async function POST(req: Request, { params }: { params: { id: string } }) {
   const supabase = createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return NextResponse.json({ error: 'Not signed in' }, { status: 401 });
@@ -67,6 +68,17 @@ export async function POST(_req: Request, { params }: { params: { id: string } }
     .eq('id', teacher.id);
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+
+  await logAudit({
+    req,
+    actorId: user.id,
+    actorRole: caller?.role,
+    action: 'teacher.approved',
+    entityType: 'teacher_profile',
+    entityId: teacher.id,
+    oldValue: { approval_status: teacher.approval_status },
+    newValue: { approval_status: 'approved', is_visible: true, slug },
+  });
 
   // Notify teacher (best-effort).
   try {

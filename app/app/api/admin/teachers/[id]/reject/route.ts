@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { createClient, createServiceRoleClient } from '@/lib/supabase/server';
 import { notifyTeacherRejected } from '@/lib/notifications';
+import { logAudit } from '@/lib/audit';
 
 interface Body {
   reason: string;
@@ -41,6 +42,16 @@ export async function POST(req: Request, { params }: { params: { id: string } })
     .eq('id', params.id);
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+
+  await logAudit({
+    req,
+    actorId: user.id,
+    actorRole: caller?.role,
+    action: 'teacher.rejected',
+    entityType: 'teacher_profile',
+    entityId: params.id,
+    newValue: { approval_status: 'rejected', is_visible: false, rejection_note: body.reason.trim() },
+  });
 
   // Notify teacher (best-effort).
   try {

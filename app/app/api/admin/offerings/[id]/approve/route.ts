@@ -1,9 +1,10 @@
 import { NextResponse } from 'next/server';
 import { createClient, createServiceRoleClient } from '@/lib/supabase/server';
+import { logAudit } from '@/lib/audit';
 
 // Admin approves a class offering: approval_status='approved', is_visible=true (atomic).
 
-export async function POST(_req: Request, { params }: { params: { id: string } }) {
+export async function POST(req: Request, { params }: { params: { id: string } }) {
   const supabase = createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return NextResponse.json({ error: 'Not signed in' }, { status: 401 });
@@ -22,5 +23,17 @@ export async function POST(_req: Request, { params }: { params: { id: string } }
     .update({ approval_status: 'approved', is_visible: true, rejection_note: null, approved_by: user.id, approved_at: new Date().toISOString() })
     .eq('id', offering.id);
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+
+  await logAudit({
+    req,
+    actorId: user.id,
+    actorRole: caller?.role,
+    action: 'offering.approved',
+    entityType: 'class_offering',
+    entityId: offering.id,
+    oldValue: { approval_status: offering.approval_status },
+    newValue: { approval_status: 'approved', is_visible: true },
+  });
+
   return NextResponse.json({ ok: true });
 }

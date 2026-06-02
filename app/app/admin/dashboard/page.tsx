@@ -62,6 +62,7 @@ export default async function AdminDashboardPage() {
           <NavCard href="/admin/payouts" title="Payouts" sub="Mark teacher payouts paid" />
           <NavCard href="/admin/bookings" title="Bookings" sub="All sessions, filterable by status" />
           <NavCard href="/admin/students" title="Students" sub="All students, credits, sessions" />
+          <NavCard href="/admin/audit" title="Audit log" sub="Trail of approvals, payouts, role changes" />
         </div>
 
         <p className="mt-12 text-xs text-muted-warm">
