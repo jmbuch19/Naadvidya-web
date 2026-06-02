@@ -8,7 +8,7 @@ export function Footer() {
           <div className="font-display text-2xl text-maroon mb-2">नादविद्या</div>
           <p className="text-muted-warm leading-relaxed">
             India&rsquo;s premier online academy for Indian Classical music. Curated by{' '}
-            Mrs. Amee Buch, Sangeet Visharad.
+            the Naadvidya Gurus.
           </p>
         </div>
 
@@ -42,7 +42,7 @@ export function Footer() {
 
       <div className="border-t border-line">
         <div className="max-w-6xl mx-auto px-6 py-4 text-xs text-muted-warm text-center">
-          © {new Date().getFullYear()} Naadvidya — Hosted by Mrs. Amee Buch, Sangeet Visharad.
+          © {new Date().getFullYear()} Naadvidya — Guided by the Naadvidya Gurus.
         </div>
       </div>
     </footer>

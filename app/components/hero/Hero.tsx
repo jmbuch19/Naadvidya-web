@@ -31,7 +31,7 @@ export function Hero() {
         </h1>
         <p className="mt-6 text-lg text-muted-warm max-w-2xl mx-auto leading-relaxed">
           A curated, invitation-only academy for Indian Classical music at Visharad
-          level and beyond. Hosted by Mrs. Amee Buch, Sangeet Visharad.
+          level and beyond. Guided by the Naadvidya Gurus.
         </p>
         <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
           <Link href="/teachers" className="btn-primary">Meet Your Gurus</Link>

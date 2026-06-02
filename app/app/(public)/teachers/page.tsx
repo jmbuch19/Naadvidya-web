@@ -6,7 +6,7 @@ export const revalidate = 60;
 export const metadata = {
   title: 'Teachers — Naadvidya',
   description:
-    'Meet the curated faculty of Naadvidya. Every guru is personally reviewed by Mrs. Amee Buch, Sangeet Visharad.',
+    'Meet the curated faculty of Naadvidya. Every guru is personally reviewed by the Naadvidya Gurus.',
 };
 
 export default async function TeachersPage() {
@@ -22,7 +22,7 @@ export default async function TeachersPage() {
         </h1>
         <p className="mt-4 text-muted-warm max-w-2xl">
           A curated faculty of Sangeet Visharads and accomplished performers. Each
-          teacher has been personally reviewed by Amee Buch.
+          teacher has been personally reviewed by the Naadvidya Gurus.
         </p>
       </header>
 

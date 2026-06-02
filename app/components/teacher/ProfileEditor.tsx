@@ -82,7 +82,7 @@ export function ProfileEditor({ initial }: { initial: TeacherRow }) {
     <div className="space-y-5">
       <label className="block">
         <span className="text-sm text-ink">Bio</span>
-        <span className="block text-xs text-muted-warm mb-1">Minimum 150 words. This is what Amee reviews and what students read.</span>
+        <span className="block text-xs text-muted-warm mb-1">Minimum 150 words. This is what the Naadvidya Gurus review and what students read.</span>
         <textarea
           value={bio}
           onChange={(e) => setBio(e.target.value)}

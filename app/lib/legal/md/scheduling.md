@@ -36,7 +36,7 @@
 ### 2.1 Who can reschedule
 - Students can request reschedule (one per month per teacher relationship)
 - Teachers can initiate reschedule (one per month per student relationship)
-- Amee can reschedule any session for platform or emergency reasons
+- Naadvidya can reschedule any session for platform or emergency reasons
 
 ### 2.2 Rescheduling process
 1. Initiator raises reschedule request in dashboard with reason and proposed new time
@@ -46,7 +46,7 @@
 
 ### 2.3 Limits
 - A session may only be rescheduled once. Rescheduled sessions cannot be rescheduled again.
-- A session rescheduled to > 30 days from original date requires Amee's approval
+- A session rescheduled to > 30 days from original date requires Naadvidya's approval
 - `reschedule_count` is tracked in `scheduled_sessions` table for audit
 
 ---

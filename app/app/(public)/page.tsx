@@ -2,14 +2,15 @@ import Link from 'next/link';
 import { Hero } from '@/components/hero/Hero';
 import { AmeeBlock } from '@/components/hero/AmeeBlock';
 import { TeacherCard, TeacherCardPlaceholder } from '@/components/teacher-card/TeacherCard';
-import { getApprovedTeachers, getAmee } from '@/lib/supabase/queries';
+import { getApprovedTeachers } from '@/lib/supabase/queries';
 
 export const revalidate = 60;
 
 export default async function HomePage() {
-  const [allTeachers, amee] = await Promise.all([getApprovedTeachers(), getAmee()]);
+  const allTeachers = await getApprovedTeachers();
 
-  // Exclude Amee from the "Meet Your Gurus" grid — she has her own block above.
+  // Exclude the owner-admin teaching profile from the "Meet Your Gurus" grid —
+  // the curated gurus block above stands for the collective.
   const teachers = allTeachers.filter((t) => !t.profile.is_owner);
 
   // Always show at least 6 card slots; fill remainder with "Joining Soon" placeholders.
@@ -19,7 +20,7 @@ export default async function HomePage() {
   return (
     <>
       <Hero />
-      <AmeeBlock amee={amee} />
+      <AmeeBlock />
 
       <section className="max-w-6xl mx-auto px-6 py-20">
         <div className="text-center mb-12">
@@ -28,7 +29,7 @@ export default async function HomePage() {
             Meet Your Gurus
           </h2>
           <p className="mt-4 text-muted-warm max-w-xl mx-auto">
-            Every teacher on Naadvidya is personally reviewed by Amee. No open marketplace,
+            Every teacher on Naadvidya is personally reviewed by the Naadvidya Gurus. No open marketplace,
             no algorithms — just gurus you can trust.
           </p>
         </div>

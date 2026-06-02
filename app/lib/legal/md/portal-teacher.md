@@ -6,7 +6,7 @@
 
 ## WHAT YOU ARE AGREEING TO
 
-By applying to join Naadvidya as a teacher, you are entering into an agreement with Naadvidya (operated by [legal entity name, to be confirmed]), owned and administered by Mrs. Amee Buch, Sangeet Visharad.
+By applying to join Naadvidya as a teacher, you are entering into an agreement with Naadvidya (operated by [legal entity name, to be confirmed]), administered by the Naadvidya Gurus.
 
 This is not an employment agreement. You are joining as an **independent teaching partner**.
 
@@ -24,14 +24,14 @@ This is not an employment agreement. You are joining as an **independent teachin
 
 ## 2. WHAT NAADVIDYA PROVIDES TO TEACHERS
 
-- A curated, credibility-backed platform with Amee Buch's personal endorsement
+- A curated, credibility-backed platform with the Naadvidya Gurus' collective endorsement
 - Student acquisition — you do not pay for leads or listings
 - Payment infrastructure (Razorpay) — no setup required from your end
 - Video session rooms (Daily.co) — no cost, no setup required
 - File storage for homework and feedback (Cloudflare R2)
 - Email notifications and scheduling tools
 - An Earnings dashboard showing your income in real time
-- Direct access to Amee for platform-related queries
+- Direct access to the Naadvidya Gurus for platform-related queries
 
 ---
 
@@ -41,7 +41,7 @@ This is not an employment agreement. You are joining as an **independent teachin
 - Tax filing, accounting, or financial advice
 - Legal indemnity in disputes between you and students
 - Equipment (camera, microphone, tanpura, instruments)
-- Lesson plan templates (though Amee may share guidance informally)
+- Lesson plan templates (though the Naadvidya Gurus may share guidance informally)
 
 ---
 
@@ -50,7 +50,7 @@ This is not an employment agreement. You are joining as an **independent teachin
 - You receive **80% of the effective session fee** for every completed session
 - Payouts occur on the 1st and 15th of every month via UPI or bank transfer
 - The platform retains 20% for operations (infrastructure, payment gateway, administration)
-- The 80/20 split applies to all teachers except the platform owner (Amee Buch)
+- The 80/20 split applies to all teachers except the platform owner
 - Your session fee is set by you, within the platform's recommended range
 - Naadvidya reserves the right to suggest fee adjustments to maintain platform consistency
 
@@ -65,7 +65,7 @@ This is not an employment agreement. You are joining as an **independent teachin
 ### 5.2 Non-solicitation
 - You must not solicit Naadvidya students to take lessons outside the platform during your active tenure AND for **12 months after** you leave Naadvidya
 - "Solicitation" means actively inviting a Naadvidya student to your personal teaching practice, WhatsApp group, YouTube paid course, or competing platform
-- If a student independently finds and approaches you through other means, that is not a violation — but you must inform Amee
+- If a student independently finds and approaches you through other means, that is not a violation — but you must inform Naadvidya
 
 ### 5.3 Violation of non-solicitation
 - First confirmed violation: formal written warning
@@ -77,7 +77,7 @@ This is not an employment agreement. You are joining as an **independent teachin
 
 - Student contact details, learning history, and personal information you access on the platform are confidential
 - You must not share student information with third parties
-- Platform revenue figures, internal processes, and Amee's business information are confidential
+- Platform revenue figures, internal processes, and Naadvidya's business information are confidential
 - This obligation survives your departure from the platform indefinitely
 
 ---
@@ -100,7 +100,7 @@ This is not an employment agreement. You are joining as an **independent teachin
 
 ## 9. DEPARTURE FROM THE PLATFORM
 
-- You may deactivate your profile at any time with 30 days written notice to Amee
+- You may deactivate your profile at any time with 30 days written notice to Naadvidya
 - All confirmed sessions within those 30 days must be completed or formally rescheduled
 - All pending payouts for completed sessions are processed at the next regular payout date
 - If you are removed by Naadvidya for conduct violations, payouts for disputed sessions are held pending resolution. Non-disputed completed sessions are always paid.

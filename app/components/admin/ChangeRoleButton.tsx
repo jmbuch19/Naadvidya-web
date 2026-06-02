@@ -17,7 +17,7 @@ export function ChangeRoleButton({ profileId, fullName, currentRole }: Props) {
   const verb = currentRole === 'student' ? 'Make teacher' : 'Demote to student';
   const warn =
     currentRole === 'student'
-      ? `Promote ${fullName} to teacher? A pending teacher profile will be created — Amee still has to approve it.`
+      ? `Promote ${fullName} to teacher? A pending teacher profile will be created — the Naadvidya Gurus still have to approve it.`
       : `Demote ${fullName} to student? Their teacher profile will be hidden from /teachers but kept for historical sessions.`;
 
   async function go() {

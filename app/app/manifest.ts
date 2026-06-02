@@ -9,7 +9,7 @@ export default function manifest(): MetadataRoute.Manifest {
     name: 'Naadvidya — Online Indian Classical Music Academy',
     short_name: 'Naadvidya',
     description:
-      'A curated, invitation-only academy for Indian Classical music at Visharad level and beyond. Hosted by Mrs. Amee Buch, Sangeet Visharad.',
+      'A curated, invitation-only academy for Indian Classical music at Visharad level and beyond. Guided by the Naadvidya Gurus.',
     start_url: '/',
     scope: '/',
     display: 'standalone',

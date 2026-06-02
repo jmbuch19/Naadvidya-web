@@ -283,7 +283,7 @@ export async function notifyTeacherApproved(opts: { teacher: Recipient }) {
       html: emailLayout({
         greeting: `Namaste, ${escapeHtml(opts.teacher.fullName)}.`,
         body: `
-          <p>Welcome to Naadvidya. Your teacher profile has been approved by Amee and is now live on the platform.</p>
+          <p>Welcome to Naadvidya. Your teacher profile has been approved by the Naadvidya Gurus and is now live on the platform.</p>
           <p>Next steps:</p>
           <ol>
             <li>Polish your bio and availability slots — at least 4 per week to stay active.</li>

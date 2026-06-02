@@ -20,7 +20,7 @@ export default async function OfferingsPage({ searchParams }: { searchParams: { 
         <h1 className="font-display text-4xl md:text-5xl font-semibold text-maroon">Workshops &amp; Programmes</h1>
         <p className="mt-4 text-muted-warm max-w-2xl">
           Beyond one-off Mehfil sessions: fixed-scope <strong>Riyaaz Workshops</strong> and progressive
-          long-term <strong>Gurukul Paths</strong>, each created by a Naadvidya teacher and reviewed by Amee.
+          long-term <strong>Gurukul Paths</strong>, each created by a Naadvidya teacher and reviewed by the Naadvidya Gurus.
         </p>
       </header>
 

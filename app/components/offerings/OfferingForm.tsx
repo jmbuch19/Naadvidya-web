@@ -217,7 +217,7 @@ export function OfferingForm() {
         <button onClick={submit} disabled={busy} className="btn-primary disabled:opacity-60">
           {busy ? 'Submitting…' : 'Submit for approval'}
         </button>
-        <span className="text-xs text-muted-warm">Goes live once Amee approves it.</span>
+        <span className="text-xs text-muted-warm">Goes live once the Naadvidya Gurus approve it.</span>
         {error && <p className="text-sm text-red-700">{error}</p>}
       </div>
     </div>

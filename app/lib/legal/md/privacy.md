@@ -7,7 +7,7 @@
 
 ## 1. WHO WE ARE
 
-Naadvidya is an online academy for Indian Classical music, operated by Mrs. Amee Buch, Sangeet Visharad. When this document says "we", "us", or "Naadvidya", it refers to the platform operator. You can reach us at **support@naadvidya.in** (general) or **amee@naadvidya.in** (privacy / sensitive matters).
+Naadvidya is an online academy for Indian Classical music, operated by the Naadvidya Gurus. When this document says "we", "us", or "Naadvidya", it refers to the platform operator. You can reach us at **support@naadvidya.in** (general) or **amee@naadvidya.in** (privacy / sensitive matters).
 
 The legal entity behind Naadvidya is **[to be confirmed before final publication]**, based in India.
 
@@ -68,7 +68,7 @@ We do **not** run third-party advertising trackers, behavioural-profile cookies,
 | Process credit purchases and payouts | Razorpay txn IDs, payout details (teachers) | Contract |
 | Send transactional notifications (booking confirmed, homework posted, reminders) | Email; optional phone for WhatsApp | Contract / consent |
 | Operate video sessions | Name (passed to Daily.co room as a display name) | Contract |
-| Curate the platform (Amee reviews teacher applications & offerings) | Profile info you submit | Legitimate interests |
+| Curate the platform (the Naadvidya Gurus review teacher applications & offerings) | Profile info you submit | Legitimate interests |
 | Protect the platform from abuse | Server logs | Legitimate interests |
 | Comply with Indian tax / payment law | Payout records, GST data if applicable | Legal obligation |
 
@@ -88,7 +88,7 @@ We share the minimum needed, with named processors only. We do **not** sell your
 | **Meta (WhatsApp Business API)** | Transactional WhatsApp messages (only if you opt in and provide a number) | Your name, phone number, and the template parameters in each message |
 | **Vercel** | Web hosting and serverless functions | Standard request logs |
 
-Within Naadvidya, only the owner-admin (Amee Buch) has access to platform-wide data. Teachers see only their own students; students see only their own data. Row-Level Security in the database enforces this.
+Within Naadvidya, only the owner-admin has access to platform-wide data. Teachers see only their own students; students see only their own data. Row-Level Security in the database enforces this.
 
 ---
 
@@ -169,7 +169,7 @@ We may update this policy as the platform evolves or as the law requires. Materi
 - **General privacy queries:** privacy@naadvidya.in
 - **Account deletion / data export:** amee@naadvidya.in
 - **Security disclosures:** amee@naadvidya.in
-- **Operator:** Mrs. Amee Buch, Sangeet Visharad — [legal entity to be confirmed]
+- **Operator:** The Naadvidya Gurus — [legal entity to be confirmed]
 
 ---
 

@@ -89,14 +89,14 @@ export default async function TeacherEarningsPage() {
           <p className="text-sm text-gold uppercase tracking-widest mb-1">Earnings</p>
           <h1 className="font-display text-4xl text-maroon">Your payouts</h1>
           <p className="text-muted-warm mt-2 text-sm">
-            Amee processes payouts on the 1st and 15th of every month via UPI/bank.
+            Naadvidya processes payouts on the 1st and 15th of every month via UPI/bank.
             Minimum ₹500 — smaller balances roll over to the next cycle.
           </p>
         </div>
 
         {!hasPayoutMethod && (
           <div className="mb-6 rounded-lg border border-gold/40 bg-parchment-2 px-4 py-3 text-sm text-ink">
-            ⚠️ You haven&rsquo;t added your payout details — Amee can&rsquo;t pay you until you do.{' '}
+            ⚠️ You haven&rsquo;t added your payout details — Naadvidya can&rsquo;t pay you until you do.{' '}
             <Link href="/teacher/profile#payout" className="text-maroon-mid hover:underline">Add UPI / bank details →</Link>
           </div>
         )}

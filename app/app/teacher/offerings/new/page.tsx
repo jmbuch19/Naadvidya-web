@@ -32,8 +32,8 @@ export default async function NewOfferingPage() {
 
         {teacher.approval_status !== 'approved' ? (
           <div className="bg-parchment-2 border border-line rounded-lg p-6 text-muted-warm">
-            Your teacher profile must be approved before you can create offerings. Once Amee approves your
-            profile, come back here.
+            Your teacher profile must be approved before you can create offerings. Once the Naadvidya Gurus approve
+            your profile, come back here.
           </div>
         ) : (
           <OfferingForm />

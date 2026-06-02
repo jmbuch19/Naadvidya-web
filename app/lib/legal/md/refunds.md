@@ -63,13 +63,13 @@ All other refunds are credit-based (wallet credits only).
 | No-show (no notice at all) | Full credit refund + 3 Goodwill Credits + priority rebook | Strike recorded + income forfeited |
 
 ### 3.2 Repeat cancellations by teacher
-- 3 cancellations in any 60-day period: Amee reviews teacher status
+- 3 cancellations in any 60-day period: the Naadvidya Gurus review teacher status
 - 5 cancellations in any 60-day period: teacher profile suspended pending review
-- Cancellation pattern due to documented illness or emergency: treated compassionately; no formal strike if Amee is notified within 2 hours
+- Cancellation pattern due to documented illness or emergency: treated compassionately; no formal strike if Naadvidya is notified within 2 hours
 
 ---
 
-## 4. PLATFORM CANCELLATION (Amee / System)
+## 4. PLATFORM CANCELLATION (Naadvidya / System)
 
 If Naadvidya cancels a session due to platform issues (server outage, Daily.co failure, billing error):
 - Full credit refund to student
@@ -82,7 +82,7 @@ If Naadvidya cancels a session due to platform issues (server outage, Daily.co f
 
 - Credit wallet refunds: instant (within 15 minutes)
 - INR cash refunds: 5–7 business days via Razorpay refund API
-- Goodwill Credits: added instantly by Amee or automated trigger
+- Goodwill Credits: added instantly by Naadvidya or automated trigger
 
 ---
 
@@ -109,4 +109,4 @@ Student or teacher emails: **refunds@naadvidya.in** with:
 - Session/booking ID
 - Reason and evidence if applicable
 
-Naadvidya will respond within 48 business hours. Amee makes the final call on all refund decisions.
+Naadvidya will respond within 48 business hours. The Naadvidya Gurus make the final call on all refund decisions.

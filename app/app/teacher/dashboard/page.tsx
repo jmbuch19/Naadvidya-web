@@ -129,7 +129,7 @@ export default async function TeacherDashboardPage() {
 
         {!hasPayoutMethod && (
           <div className="mb-8 rounded-lg border border-gold/40 bg-parchment-2 px-4 py-3 text-sm text-ink">
-            ⚠️ Add your <Link href="/teacher/profile#payout" className="text-maroon-mid hover:underline">payout details (UPI / bank)</Link> so Amee can pay you. Naadvidya can&rsquo;t transfer your share until then.
+            ⚠️ Add your <Link href="/teacher/profile#payout" className="text-maroon-mid hover:underline">payout details (UPI / bank)</Link> so we can pay you. Naadvidya can&rsquo;t transfer your share until then.
           </div>
         )}
 
@@ -283,7 +283,7 @@ function ApprovalBanner({ teacher }: { teacher: TeacherProfileRow }) {
   if (teacher.approval_status === 'pending') {
     return (
       <div className="mb-8 rounded-lg border border-gold/40 bg-parchment-2 px-4 py-3 text-sm text-ink">
-        <span className="text-gold font-medium">Profile pending Amee&rsquo;s approval.</span>{' '}
+        <span className="text-gold font-medium">Profile pending the Naadvidya Gurus&rsquo; approval.</span>{' '}
         Your profile is hidden from the public grid until approved.
       </div>
     );

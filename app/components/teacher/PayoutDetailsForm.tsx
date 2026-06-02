@@ -84,7 +84,7 @@ export function PayoutDetailsForm({ initial }: { initial: Initial | null }) {
       </div>
       <p className="text-xs text-muted-warm">
         Naadvidya pays out manually on the 1st and 15th of every month. Minimum payout ₹500 — smaller
-        balances roll over to the next cycle. Your details are visible only to you and to Amee.
+        balances roll over to the next cycle. Your details are visible only to you and the Naadvidya team.
       </p>
     </div>
   );

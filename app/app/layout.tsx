@@ -32,7 +32,7 @@ export const metadata: Metadata = {
   applicationName: 'Naadvidya',
   title: 'Naadvidya — Learn Indian Classical Music from India\'s Finest Gurus',
   description:
-    'Naadvidya is a curated online academy for Indian Classical music at Visharad level and beyond. Hosted by Mrs. Amee Buch, Sangeet Visharad.',
+    'Naadvidya is a curated online academy for Indian Classical music at Visharad level and beyond. Guided by the Naadvidya Gurus.',
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000'),
   manifest: '/manifest.webmanifest',
   // Favicon / app icon / OG image are picked up from app/favicon.ico, app/icon.png,

@@ -93,7 +93,7 @@ export default async function TeacherProfilePage() {
           <h1 className="font-display text-4xl text-maroon">{profile.full_name}</h1>
           {teacher.approval_status === 'pending' && (
             <p className="mt-2 text-sm text-muted-warm">
-              Profile is pending Amee&rsquo;s approval. Complete it well — that&rsquo;s what she reviews.
+              Profile is pending the Naadvidya Gurus&rsquo; approval. Complete it well — that&rsquo;s what they review.
             </p>
           )}
           {teacher.approval_status === 'approved' && teacher.slug && (

@@ -7,7 +7,7 @@
 ## PART A — WHAT NAADVIDYA OFFERS STUDENTS
 
 ### A1. Access to curated teachers
-- Every teacher on Naadvidya has been personally reviewed and approved by Amee Buch, Sangeet Visharad
+- Every teacher on Naadvidya has been personally reviewed and approved by the Naadvidya Gurus
 - You are not choosing from an open marketplace — you are choosing from a vetted faculty
 - Teacher profiles include qualifications, specialisations, ragas taught, teaching language, and session fee
 - Intro videos (where available) let you hear and see the teacher before booking
@@ -72,7 +72,7 @@ Credits do not expire. You are never rushed.
 
 ### B5. Cancellations
 - If you cannot attend a session, cancel at least 48 hours in advance for a full credit refund
-- Repeated no-shows (3+ in 60 days) will be flagged and your account may be reviewed by Amee
+- Repeated no-shows (3+ in 60 days) will be flagged and your account may be reviewed by the Naadvidya Gurus
 
 ---
 
@@ -84,7 +84,7 @@ Credits do not expire. You are never rushed.
 
 ### C2. Switching teachers
 - You may switch teachers at any time for Mehfil Sessions — simply book a different teacher
-- For Gurukul Path, a formal switch request may be submitted. Amee reviews and approves within 48 hours
+- For Gurukul Path, a formal switch request may be submitted. The Naadvidya Gurus review and approve within 48 hours
 - If the switch is due to documented conduct issues with the teacher, full credit balance is protected
 
 ### C3. Pausing a programme
@@ -94,7 +94,7 @@ Credits do not expire. You are never rushed.
 
 ### C4. Raising concerns
 - You may raise a concern about any session within 48 hours of the session date
-- Concerns are handled by Amee personally in Phase 1
+- Concerns are handled by the Naadvidya Gurus personally in Phase 1
 - For sensitive matters (conduct, harassment), email directly: amee@naadvidya.in — marked confidential
 
 ### C5. Notes and recordings
@@ -110,11 +110,11 @@ To help you choose the right teacher and format, use this guide:
 
 | Your current level | Recommended format | Recommended first step |
 |---|---|---|
-| Never studied music formally | Prarambhik · Gurukul Path | Ask Amee for a guided recommendation |
+| Never studied music formally | Prarambhik · Gurukul Path | Ask the Naadvidya Gurus for a guided recommendation |
 | Basics of swar and taal, 1–2 years study | Prarambhik/Madhyama · Gurukul or Workshop | Browse teacher profiles by specialisation |
 | Madhyama-level, formal or informal | Madhyama/Visharad · Any format | Book a trial Mehfil Session |
 | Visharad or equivalent | Visharad · Gurukul or Mehfil | Book directly |
-| Alankar/Bhushan or performing artist | Alankar · Mehfil or bespoke | Contact Amee directly |
+| Alankar/Bhushan or performing artist | Alankar · Mehfil or bespoke | Contact the Naadvidya Gurus directly |
 
 ---
 

@@ -69,7 +69,7 @@ export default async function TeacherOfferingsPage() {
 
         {teacher.approval_status !== 'approved' && (
           <div className="mb-6 rounded-lg border border-gold/40 bg-parchment-2 p-4 text-sm text-ink">
-            Once Amee approves your teacher profile you can create Workshops and Gurukul Programmes here.
+            Once the Naadvidya Gurus approve your teacher profile you can create Workshops and Gurukul Programmes here.
           </div>
         )}
 

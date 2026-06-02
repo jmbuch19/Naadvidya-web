@@ -14,7 +14,7 @@ export default function RegisterPage({ searchParams }: PageProps) {
     <>
       <h1 className="font-display text-3xl font-semibold text-maroon mb-2">Begin your journey</h1>
       <p className="text-muted-warm text-sm mb-6">
-        Create your Naadvidya account. Teachers go through Amee&rsquo;s approval before going live.
+        Create your Naadvidya account. Teachers go through the Naadvidya Gurus&rsquo; approval before going live.
       </p>
 
       {searchParams.error && (
